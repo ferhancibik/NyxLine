@@ -1,0 +1,24 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:NyxLine.MAUI"
+             xmlns:converters="clr-namespace:NyxLine.MAUI.Converters"
+             x:Class="NyxLine.MAUI.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Global Converters -->
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <converters:LikeButtonConverter x:Key="LikeButtonConverter" />
+            <converters:LikeColorConverter x:Key="LikeColorConverter" />
+            <converters:PositiveNumberToVisibilityConverter x:Key="PositiveNumberToVisibilityConverter" />
+            <converters:ImagePathToVisibilityConverter x:Key="ImagePathToVisibilityConverter" />
+            <converters:FollowButtonTextConverter x:Key="FollowButtonTextConverter" />
+            <converters:FollowButtonColorConverter x:Key="FollowButtonColorConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

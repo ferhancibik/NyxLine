@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="NyxLine.MAUI.Views.LoginPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Giriş Yap"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+    
+    <ScrollView>
+        <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
+            
+            <!-- Logo/Title -->
+            <Label Text="NyxLine" 
+                   FontSize="36" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="{DynamicResource Primary}" />
+            
+            <Label Text="Instagram benzeri sosyal medya uygulaması" 
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   TextColor="{DynamicResource Secondary}" />
+
+            <!-- Login Form -->
+            <Frame BackgroundColor="{DynamicResource SecondaryBackgroundColor}" 
+                   CornerRadius="10" 
+                   Padding="20"
+                   Margin="0,20,0,0">
+                
+                <StackLayout Spacing="15">
+                    
+                    <Entry x:Name="EmailEntry"
+                           Placeholder="E-posta veya kullanıcı adı"
+                           Keyboard="Email"
+                           Text="{Binding EmailOrUsername}" />
+                    
+                    <Entry x:Name="PasswordEntry"
+                           Placeholder="Şifre"
+                           IsPassword="True"
+                           Text="{Binding Password}" />
+                    
+                    <Button Text="Giriş Yap"
+                            BackgroundColor="{DynamicResource Primary}"
+                            TextColor="White"
+                            CornerRadius="25"
+                            HeightRequest="50"
+                            Clicked="OnLoginClicked"
+                            IsEnabled="{Binding IsNotBusy}" />
+                    
+                    <Button Text="Misafir Modunda Gir"
+                            BackgroundColor="{DynamicResource Secondary}"
+                            TextColor="White"
+                            CornerRadius="25"
+                            HeightRequest="50"
+                            Clicked="OnGuestLoginClicked"
+                            IsEnabled="{Binding IsNotBusy}" />
+                    
+                    <!-- Forgot Password Link -->
+                    <Label Text="Şifremi Unuttum" 
+                           TextColor="{DynamicResource Primary}"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Margin="0,10,0,0">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnForgotPasswordTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    
+                    <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                                     IsRunning="{Binding IsBusy}"
+                                     Color="{DynamicResource Primary}" />
+                    
+                </StackLayout>
+                
+            </Frame>
+
+            <!-- Register Link -->
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,20,0,0">
+                <Label Text="Hesabınız yok mu? " />
+                <Label Text="Kayıt Ol" 
+                       TextColor="{DynamicResource Primary}"
+                       FontAttributes="Bold">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnRegisterTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+            
+        </StackLayout>
+    </ScrollView>
+    
+</ContentPage> 

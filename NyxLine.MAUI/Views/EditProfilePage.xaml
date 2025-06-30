@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="NyxLine.MAUI.Views.EditProfilePage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Profili Düzenle">
+    
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+            
+            <!-- Profile Image Section -->
+            <Frame CornerRadius="10" Padding="20">
+                <StackLayout Spacing="15">
+                    <Label Text="Profil Fotoğrafı" FontSize="16" FontAttributes="Bold" />
+                    
+                    <Frame WidthRequest="120" 
+                           HeightRequest="120" 
+                           CornerRadius="60" 
+                           Padding="0" 
+                           HorizontalOptions="Center" 
+                           IsClippedToBounds="True"
+                           BackgroundColor="LightGray">
+                        <Image x:Name="ProfileImage" 
+                               Source="{Binding ProfileImageSource}" 
+                               Aspect="AspectFill" />
+                    </Frame>
+                    
+                    <Button Text="Fotoğraf Seç" 
+                            BackgroundColor="{DynamicResource Secondary}"
+                            TextColor="White"
+                            CornerRadius="20"
+                            Clicked="OnSelectImageClicked"
+                            IsEnabled="{Binding IsNotBusy}" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Profile Info Section -->
+            <Frame CornerRadius="10" Padding="20">
+                <StackLayout Spacing="15">
+                    <Label Text="Kişisel Bilgiler" FontSize="16" FontAttributes="Bold" />
+                    
+                    <Entry Placeholder="Ad" 
+                           Text="{Binding FirstName}" 
+                           IsEnabled="{Binding IsNotBusy}" />
+                    
+                    <Entry Placeholder="Soyad" 
+                           Text="{Binding LastName}"
+                           IsEnabled="{Binding IsNotBusy}" />
+                    
+                    <Editor Placeholder="Biyografi (İsteğe bağlı)" 
+                            Text="{Binding Bio}"
+                            HeightRequest="100"
+                            IsEnabled="{Binding IsNotBusy}" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <StackLayout Spacing="10">
+                <Button Text="Kaydet"
+                        BackgroundColor="{DynamicResource Primary}"
+                        TextColor="White"
+                        CornerRadius="25"
+                        HeightRequest="50"
+                        Clicked="OnSaveClicked"
+                        IsEnabled="{Binding IsNotBusy}" />
+                
+                <Button Text="İptal"
+                        BackgroundColor="Gray"
+                        TextColor="White"
+                        CornerRadius="25"
+                        HeightRequest="50"
+                        Clicked="OnCancelClicked"
+                        IsEnabled="{Binding IsNotBusy}" />
+            </StackLayout>
+            
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                               IsRunning="{Binding IsBusy}"
+                               Color="{DynamicResource Primary}" />
+            
+        </StackLayout>
+    </ScrollView>
+    
+</ContentPage> 

@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NyxLine.API", "NyxLine.API\NyxLine.API.csproj", "{F5EC315B-2F83-44F2-8030-FCB117C1C7B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NyxLine.MAUI", "NyxLine.MAUI\NyxLine.MAUI.csproj", "{6681CBA1-F61D-4591-B6FE-D5D21820CA49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5EC315B-2F83-44F2-8030-FCB117C1C7B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5EC315B-2F83-44F2-8030-FCB117C1C7B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5EC315B-2F83-44F2-8030-FCB117C1C7B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5EC315B-2F83-44F2-8030-FCB117C1C7B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6681CBA1-F61D-4591-B6FE-D5D21820CA49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6681CBA1-F61D-4591-B6FE-D5D21820CA49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6681CBA1-F61D-4591-B6FE-D5D21820CA49}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6681CBA1-F61D-4591-B6FE-D5D21820CA49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6681CBA1-F61D-4591-B6FE-D5D21820CA49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6681CBA1-F61D-4591-B6FE-D5D21820CA49}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A5FDC46C-F9B1-4807-B9D6-B3A67378DEE8}
+	EndGlobalSection
+EndGlobal

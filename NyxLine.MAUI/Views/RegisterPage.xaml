@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="NyxLine.MAUI.Views.RegisterPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Kayıt Ol">
+    
+    <ScrollView>
+        <StackLayout Padding="30" Spacing="20">
+            
+            <Label Text="Yeni Hesap Oluştur" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="{DynamicResource Primary}" />
+
+            <Frame BackgroundColor="{DynamicResource SecondaryBackgroundColor}" 
+                   CornerRadius="10" 
+                   Padding="20">
+                
+                <StackLayout Spacing="15">
+                    
+                    <Entry Placeholder="Ad" Text="{Binding FirstName}" />
+                    <Entry Placeholder="Soyad" Text="{Binding LastName}" />
+                    <Entry Placeholder="Kullanıcı Adı" Text="{Binding UserName}" />
+                    <Entry Placeholder="E-posta" Keyboard="Email" Text="{Binding Email}" />
+                    <Entry Placeholder="Şifre" IsPassword="True" Text="{Binding Password}" />
+                    <Entry Placeholder="Biyografi (İsteğe bağlı)" Text="{Binding Bio}" />
+                    
+                    <Button Text="Kayıt Ol"
+                            BackgroundColor="{DynamicResource Primary}"
+                            TextColor="White"
+                            CornerRadius="25"
+                            HeightRequest="50"
+                            Clicked="OnRegisterClicked"
+                            IsEnabled="{Binding IsNotBusy}" />
+                    
+                    <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                                     IsRunning="{Binding IsBusy}"
+                                     Color="{DynamicResource Primary}" />
+                    
+                </StackLayout>
+                
+            </Frame>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Label Text="Zaten hesabınız var mı? " />
+                <Label Text="Giriş Yap" 
+                       TextColor="{DynamicResource Primary}"
+                       FontAttributes="Bold">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLoginTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+            
+        </StackLayout>
+    </ScrollView>
+    
+</ContentPage> 

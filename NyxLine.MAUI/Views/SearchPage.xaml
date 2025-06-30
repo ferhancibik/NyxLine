@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="NyxLine.MAUI.Views.SearchPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="SearchPageRoot"
+             Title="Arama">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Arama Çubuğu -->
+        <Frame Grid.Row="0" BackgroundColor="White" Padding="16" HasShadow="True">
+            <SearchBar x:Name="UserSearchBar"
+                       Placeholder="Kullanıcı ara..."
+                       TextChanged="OnSearchTextChanged"
+                       SearchButtonPressed="OnSearchButtonPressed" />
+        </Frame>
+
+        <!-- Arama Sonuçları -->
+        <CollectionView Grid.Row="1" 
+                        ItemsSource="{Binding SearchResults}"
+                        BackgroundColor="#F5F5F5">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BackgroundColor="White" 
+                           Margin="16,8" 
+                           Padding="16" 
+                           CornerRadius="12"
+                           HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnUserTapped" CommandParameter="{Binding Id}" />
+                        </Frame.GestureRecognizers>
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Profil Fotoğrafı -->
+                            <Frame Grid.Column="0"
+                                   WidthRequest="50"
+                                   HeightRequest="50"
+                                   CornerRadius="25"
+                                   Padding="0"
+                                   IsClippedToBounds="True"
+                                   HasShadow="False"
+                                   BackgroundColor="LightGray">
+                                <Image Source="{Binding ProfileImageUrl}"
+                                       Aspect="AspectFill"
+                                       WidthRequest="50"
+                                       HeightRequest="50">
+                                    <Image.Triggers>
+                                        <DataTrigger TargetType="Image" 
+                                                   Binding="{Binding ProfileImageUrl}" 
+                                                   Value="{x:Null}">
+                                            <Setter Property="Source" Value="dotnet_bot.png" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Image" 
+                                                   Binding="{Binding ProfileImageUrl}" 
+                                                   Value="">
+                                            <Setter Property="Source" Value="dotnet_bot.png" />
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                </Image>
+                            </Frame>
+
+                            <!-- Kullanıcı Bilgileri -->
+                            <StackLayout Grid.Column="1" 
+                                       Orientation="Vertical" 
+                                       VerticalOptions="Center"
+                                       Margin="16,0,0,0">
+                                <Label Text="{Binding FirstName}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" 
+                                       TextColor="Black" />
+                                <Label Text="{Binding UserName, StringFormat='@{0}'}" 
+                                       FontSize="14" 
+                                       TextColor="Gray" />
+                                <Label Text="{Binding Bio}" 
+                                       FontSize="12" 
+                                       TextColor="DarkGray" 
+                                       MaxLines="2"
+                                       LineBreakMode="TailTruncation">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" 
+                                                   Binding="{Binding Bio}" 
+                                                   Value="{x:Null}">
+                                            <Setter Property="IsVisible" Value="False" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" 
+                                                   Binding="{Binding Bio}" 
+                                                   Value="">
+                                            <Setter Property="IsVisible" Value="False" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </StackLayout>
+
+                            <!-- Takip Butonu -->
+                            <Button Grid.Column="2"
+                                    Text="{Binding IsFollowedByCurrentUser, Converter={StaticResource FollowButtonTextConverter}}" 
+                                    BackgroundColor="{Binding IsFollowedByCurrentUser, Converter={StaticResource FollowButtonColorConverter}}"
+                                    TextColor="White"
+                                    CornerRadius="20"
+                                    WidthRequest="100"
+                                    HeightRequest="40"
+                                    FontSize="12"
+                                    Command="{Binding Source={x:Reference Name=SearchPageRoot}, Path=BindingContext.ToggleFollowCommand}"
+                                    CommandParameter="{Binding Id}" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Boş Durum Mesajı -->
+        <StackLayout Grid.Row="1" 
+                     VerticalOptions="Center" 
+                     HorizontalOptions="Center"
+                     IsVisible="{Binding IsSearchResultsEmpty}">
+            <Label Text="Kullanıcı bulunamadı" 
+                   FontSize="16" 
+                   TextColor="Gray" 
+                   HorizontalOptions="Center" />
+            <Label Text="Farklı bir arama terimi deneyin" 
+                   FontSize="14" 
+                   TextColor="LightGray" 
+                   HorizontalOptions="Center" 
+                   Margin="0,8,0,0" />
+        </StackLayout>
+
+        <!-- Yükleniyor Göstergesi -->
+        <ActivityIndicator Grid.Row="1" 
+                          IsVisible="{Binding IsLoading}" 
+                          IsRunning="{Binding IsLoading}" 
+                          Color="#007ACC" 
+                          VerticalOptions="Center" 
+                          HorizontalOptions="Center" />
+    </Grid>
+</ContentPage> 

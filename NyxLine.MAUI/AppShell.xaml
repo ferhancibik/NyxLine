@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="NyxLine.MAUI.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:NyxLine.MAUI.Views"
+    Title="NyxLine">
+
+    <!-- Auth Pages (No tabs) -->
+    <ShellContent x:Name="LoginShell" 
+                  Route="login"
+                  ContentTemplate="{DataTemplate local:LoginPage}" />
+
+    <ShellContent x:Name="RegisterShell" 
+                  Route="register"
+                  ContentTemplate="{DataTemplate local:RegisterPage}" />
+
+    <ShellContent x:Name="ForgotPasswordShell"
+                  Route="forgotpassword"
+                  ContentTemplate="{DataTemplate local:ForgotPasswordPage}" />
+
+    <ShellContent x:Name="ResetPasswordShell"
+                  Route="resetpassword"
+                  ContentTemplate="{DataTemplate local:ResetPasswordPage}" />
+
+    <!-- Main App with Tabs -->
+    <TabBar x:Name="MainTabBar" Route="main">
+        
+        <Tab Title="Ana Sayfa" Icon="home.png">
+            <ShellContent ContentTemplate="{DataTemplate local:FeedPage}" />
+        </Tab>
+        
+        <Tab Title="Arama" Icon="search.png">
+            <ShellContent ContentTemplate="{DataTemplate local:SearchPage}" />
+        </Tab>
+        
+        <Tab Title="Gönderi" Icon="add.png">
+            <ShellContent ContentTemplate="{DataTemplate local:CreatePostPage}" />
+        </Tab>
+        
+        <Tab Title="Profil" Icon="profile.png">
+            <ShellContent ContentTemplate="{DataTemplate local:ProfilePage}" />
+        </Tab>
+        
+    </TabBar>
+
+    <!-- Additional Pages -->
+    <ShellContent x:Name="ChangePasswordShell"
+                  Route="changepassword"
+                  ContentTemplate="{DataTemplate local:ChangePasswordPage}" />
+                  
+    <ShellContent x:Name="UserProfileShell"
+                  Route="userprofile"
+                  ContentTemplate="{DataTemplate local:UserProfilePage}" />
+
+</Shell>
