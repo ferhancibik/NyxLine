@@ -9,20 +9,21 @@
         <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
             
             <!-- Logo and Title -->
-            <StackLayout Spacing="10" HorizontalOptions="Center">
+            <StackLayout Spacing="15" HorizontalOptions="Center">
                 <Image Source="nyxline_logo.png"
-                       HeightRequest="100"
-                       WidthRequest="100"
+                       HeightRequest="120"
+                       WidthRequest="120"
                        Aspect="AspectFit"
                        HorizontalOptions="Center" />
                 
                 <Label Text="NyxLine" 
-                       Style="{StaticResource TitleStyle}"
+                       FontFamily="QuicksandBold"
+                       FontSize="48"
                        HorizontalOptions="Center"
                        TextColor="{DynamicResource Primary}" />
                 
-                <Label Text="Instagram benzeri sosyal medya uygulaması" 
-                       Style="{StaticResource CaptionStyle}"
+                <Label Text="Gökyüzünün Sosyal Medya Uygulaması" 
+                       Style="{StaticResource SubtitleStyle}"
                        HorizontalOptions="Center"
                        TextColor="{DynamicResource Secondary}" />
             </StackLayout>
