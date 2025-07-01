@@ -13,8 +13,11 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("Quicksand-Regular.ttf", "QuicksandRegular");
+                fonts.AddFont("Quicksand-Light.ttf", "QuicksandLight");
+                fonts.AddFont("Quicksand-Medium.ttf", "QuicksandMedium");
+                fonts.AddFont("Quicksand-SemiBold.ttf", "QuicksandSemiBold");
+                fonts.AddFont("Quicksand-Bold.ttf", "QuicksandBold");
             });
 
         // Add HttpClient

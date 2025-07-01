@@ -8,17 +8,24 @@
     <ScrollView>
         <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
             
-            <!-- Logo/Title -->
-            <Label Text="NyxLine" 
-                   FontSize="36" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   TextColor="{DynamicResource Primary}" />
-            
-            <Label Text="Instagram benzeri sosyal medya uygulaması" 
-                   FontSize="14"
-                   HorizontalOptions="Center"
-                   TextColor="{DynamicResource Secondary}" />
+            <!-- Logo and Title -->
+            <StackLayout Spacing="10" HorizontalOptions="Center">
+                <Image Source="nyxline_logo.png"
+                       HeightRequest="100"
+                       WidthRequest="100"
+                       Aspect="AspectFit"
+                       HorizontalOptions="Center" />
+                
+                <Label Text="NyxLine" 
+                       Style="{StaticResource TitleStyle}"
+                       HorizontalOptions="Center"
+                       TextColor="{DynamicResource Primary}" />
+                
+                <Label Text="Instagram benzeri sosyal medya uygulaması" 
+                       Style="{StaticResource CaptionStyle}"
+                       HorizontalOptions="Center"
+                       TextColor="{DynamicResource Secondary}" />
+            </StackLayout>
 
             <!-- Login Form -->
             <Frame BackgroundColor="{DynamicResource SecondaryBackgroundColor}" 
@@ -31,24 +38,26 @@
                     <Entry x:Name="EmailEntry"
                            Placeholder="E-posta veya kullanıcı adı"
                            Keyboard="Email"
-                           Text="{Binding EmailOrUsername}" />
+                           Text="{Binding EmailOrUsername}"
+                           FontFamily="QuicksandRegular" />
                     
                     <Entry x:Name="PasswordEntry"
                            Placeholder="Şifre"
                            IsPassword="True"
-                           Text="{Binding Password}" />
+                           Text="{Binding Password}"
+                           FontFamily="QuicksandRegular" />
                     
                     <Button Text="Giriş Yap"
+                            Style="{StaticResource ButtonTextStyle}"
                             BackgroundColor="{DynamicResource Primary}"
-                            TextColor="White"
                             CornerRadius="25"
                             HeightRequest="50"
                             Clicked="OnLoginClicked"
                             IsEnabled="{Binding IsNotBusy}" />
                     
                     <Button Text="Misafir Modunda Gir"
+                            Style="{StaticResource ButtonTextStyle}"
                             BackgroundColor="{DynamicResource Secondary}"
-                            TextColor="White"
                             CornerRadius="25"
                             HeightRequest="50"
                             Clicked="OnGuestLoginClicked"
@@ -56,6 +65,7 @@
                     
                     <!-- Forgot Password Link -->
                     <Label Text="Şifremi Unuttum" 
+                           Style="{StaticResource BodyStyle}"
                            TextColor="{DynamicResource Primary}"
                            FontAttributes="Bold"
                            HorizontalOptions="Center"
@@ -75,8 +85,9 @@
 
             <!-- Register Link -->
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,20,0,0">
-                <Label Text="Hesabınız yok mu? " />
+                <Label Text="Hesabınız yok mu? " Style="{StaticResource BodyStyle}" />
                 <Label Text="Kayıt Ol" 
+                       Style="{StaticResource BodyStyle}"
                        TextColor="{DynamicResource Primary}"
                        FontAttributes="Bold">
                     <Label.GestureRecognizers>
