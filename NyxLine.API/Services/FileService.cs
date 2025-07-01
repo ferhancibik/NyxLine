@@ -25,13 +25,17 @@ namespace NyxLine.API.Services
                     return null;
 
                 var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads", folder);
+                _logger.LogInformation($"Uploads path: {uploadsPath}");
+
                 if (!Directory.Exists(uploadsPath))
                 {
+                    _logger.LogInformation($"Creating directory: {uploadsPath}");
                     Directory.CreateDirectory(uploadsPath);
                 }
 
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
                 var filePath = Path.Combine(uploadsPath, fileName);
+                _logger.LogInformation($"File path: {filePath}");
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -52,61 +56,47 @@ namespace NyxLine.API.Services
         {
             try
             {
-                Console.WriteLine($"[FileService DEBUG] SaveFileFromBytesAsync başlatıldı");
-                Console.WriteLine($"[FileService DEBUG] fileBytes null mu: {fileBytes == null}");
+                _logger.LogDebug("SaveFileFromBytesAsync başlatıldı");
                 
                 if (fileBytes == null || fileBytes.Length == 0)
                 {
-                    Console.WriteLine($"[FileService ERROR] fileBytes null veya boş");
+                    _logger.LogError("fileBytes null veya boş");
                     return null;
                 }
 
-                Console.WriteLine($"[FileService DEBUG] fileBytes uzunluğu: {fileBytes.Length}");
-                Console.WriteLine($"[FileService DEBUG] MaxFileSize: {MaxFileSize}");
-
-                // Dosya boyutu kontrolü
                 if (fileBytes.Length > MaxFileSize)
                 {
-                    Console.WriteLine($"[FileService ERROR] Dosya boyutu çok büyük: {fileBytes.Length} > {MaxFileSize}");
+                    _logger.LogError($"Dosya boyutu çok büyük: {fileBytes.Length} > {MaxFileSize}");
                     return null;
                 }
 
-                Console.WriteLine($"[FileService DEBUG] WebRootPath: {_environment.WebRootPath}");
                 var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads", folder);
-                Console.WriteLine($"[FileService DEBUG] uploadsPath: {uploadsPath}");
-                
+                _logger.LogInformation($"Uploads path: {uploadsPath}");
+
+                // Klasör yoksa oluştur
                 if (!Directory.Exists(uploadsPath))
                 {
-                    Console.WriteLine($"[FileService DEBUG] Klasör yok, oluşturuluyor: {uploadsPath}");
+                    _logger.LogInformation($"Creating directory: {uploadsPath}");
                     Directory.CreateDirectory(uploadsPath);
-                }
-                else
-                {
-                    Console.WriteLine($"[FileService DEBUG] Klasör mevcut: {uploadsPath}");
                 }
 
                 // Güvenli dosya adı oluştur
                 var extension = Path.GetExtension(fileName);
                 if (string.IsNullOrEmpty(extension))
-                    extension = ".jpg"; // Varsayılan uzantı
+                    extension = ".jpg";
 
                 var safeFileName = $"{Guid.NewGuid()}{extension}";
                 var filePath = Path.Combine(uploadsPath, safeFileName);
-                Console.WriteLine($"[FileService DEBUG] Tam dosya yolu: {filePath}");
+                _logger.LogInformation($"File path: {filePath}");
 
                 // Dosyayı kaydet
                 await File.WriteAllBytesAsync(filePath, fileBytes);
-                Console.WriteLine($"[FileService DEBUG] Dosya başarıyla kaydedildi");
+                _logger.LogInformation("Dosya başarıyla kaydedildi");
 
-                var returnPath = $"/uploads/{folder}/{safeFileName}";
-                Console.WriteLine($"[FileService DEBUG] Return path: {returnPath}");
-                
-                return returnPath;
+                return $"/uploads/{folder}/{safeFileName}";
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[FileService ERROR] Hata: {ex.Message}");
-                Console.WriteLine($"[FileService ERROR] Stack trace: {ex.StackTrace}");
                 _logger.LogError(ex, "Error saving file from bytes");
                 return null;
             }

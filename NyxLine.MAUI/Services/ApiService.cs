@@ -13,21 +13,22 @@ namespace NyxLine.MAUI.Services
 
         public ApiService(HttpClient httpClient, ISecureStorage secureStorage)
         {
-            _httpClient = httpClient;
             _secureStorage = secureStorage;
+
+            #if WINDOWS
+            // Windows'ta localhost bağlantısı için
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
+            };
+            _httpClient = new HttpClient(handler);
+            #else
+            _httpClient = httpClient;
+            #endif
 
             // HTTP istemcisinin yapılandırması
             _httpClient.Timeout = TimeSpan.FromSeconds(30);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
-            #if WINDOWS
-            // Windows'ta localhost bağlantısı için
-            HttpClientHandler windowsHandler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
-            };
-            _httpClient = new HttpClient(windowsHandler);
-            #endif
         }
 
         private async Task<string?> GetTokenAsync()

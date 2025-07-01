@@ -12,6 +12,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add URL configuration
+builder.WebHost.UseUrls("http://localhost:8080");
+
 // Add services to the container
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -104,6 +107,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+// Ensure wwwroot directory exists
+var wwwrootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+if (!Directory.Exists(wwwrootPath))
+{
+    Directory.CreateDirectory(wwwrootPath);
 }
 
 app.UseHttpsRedirection();

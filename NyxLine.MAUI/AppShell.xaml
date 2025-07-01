@@ -53,4 +53,8 @@
                   Route="userprofile"
                   ContentTemplate="{DataTemplate local:UserProfilePage}" />
 
+    <ShellContent x:Name="EditProfileShell"
+                  Route="editprofile"
+                  ContentTemplate="{DataTemplate local:EditProfilePage}" />
+
 </Shell>
