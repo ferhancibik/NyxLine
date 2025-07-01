@@ -2,6 +2,8 @@ using NyxLine.MAUI.Models;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Diagnostics;
+using System.Linq;
 
 namespace NyxLine.MAUI.Services
 {
@@ -10,6 +12,7 @@ namespace NyxLine.MAUI.Services
         private readonly HttpClient _httpClient;
         private readonly ISecureStorage _secureStorage;
         private readonly string _baseUrl = "http://localhost:8080/api";
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         public ApiService(HttpClient httpClient, ISecureStorage secureStorage)
         {
@@ -39,7 +42,7 @@ namespace NyxLine.MAUI.Services
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[Token] Hata: {ex.Message}");
+                Debug.WriteLine($"[Token] Hata: {ex.Message}");
                 return null;
             }
         }
@@ -52,7 +55,7 @@ namespace NyxLine.MAUI.Services
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[Token] Kaydetme hatası: {ex.Message}");
+                Debug.WriteLine($"[Token] Kaydetme hatası: {ex.Message}");
             }
         }
 
@@ -64,14 +67,14 @@ namespace NyxLine.MAUI.Services
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[Token] Silme hatası: {ex.Message}");
+                Debug.WriteLine($"[Token] Silme hatası: {ex.Message}");
             }
         }
 
         private async Task SetAuthHeaderAsync()
         {
             var token = await GetTokenAsync();
-            System.Diagnostics.Debug.WriteLine($"[Auth] Token uzunluğu: {token?.Length ?? 0}");
+            Debug.WriteLine($"[Auth] Token uzunluğu: {token?.Length ?? 0}");
             
             _httpClient.DefaultRequestHeaders.Authorization = !string.IsNullOrEmpty(token) 
                 ? new AuthenticationHeaderValue("Bearer", token)
@@ -82,7 +85,7 @@ namespace NyxLine.MAUI.Services
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine($"[API] Başlangıç: {method} {_baseUrl}{endpoint}");
+                Debug.WriteLine($"[API] Başlangıç: {method} {_baseUrl}{endpoint}");
                 await SetAuthHeaderAsync();
 
                 var request = new HttpRequestMessage(method, $"{_baseUrl}{endpoint}");
@@ -91,61 +94,55 @@ namespace NyxLine.MAUI.Services
                 {
                     var json = JsonSerializer.Serialize(data);
                     request.Content = new StringContent(json, Encoding.UTF8, "application/json");
-                    System.Diagnostics.Debug.WriteLine($"[API] İstek verisi: {json}");
+                    Debug.WriteLine($"[API] İstek verisi: {json}");
                 }
 
-                System.Diagnostics.Debug.WriteLine($"[API] İstek gönderiliyor: {method} {_baseUrl}{endpoint}");
+                Debug.WriteLine($"[API] İstek gönderiliyor: {method} {_baseUrl}{endpoint}");
 
                 var response = await _httpClient.SendAsync(request);
                 var content = await response.Content.ReadAsStringAsync();
 
-                System.Diagnostics.Debug.WriteLine($"[API] Yanıt durumu: {response.StatusCode}");
-                System.Diagnostics.Debug.WriteLine($"[API] Yanıt içeriği: {content}");
+                Debug.WriteLine($"[API] Yanıt durumu: {response.StatusCode}");
+                Debug.WriteLine($"[API] Yanıt içeriği: {content}");
 
                 if (response.IsSuccessStatusCode)
                 {
                     try 
                     {
-                        var result = JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true
-                        });
-                        System.Diagnostics.Debug.WriteLine($"[API] Başarılı yanıt: {result}");
+                        var result = JsonSerializer.Deserialize<T>(content, _jsonOptions);
+                        Debug.WriteLine($"[API] Başarılı yanıt: {result}");
                         return result;
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine($"[API] Başarılı yanıt parse hatası: {ex.Message}");
+                        Debug.WriteLine($"[API] Başarılı yanıt parse hatası: {ex.Message}");
                         return default;
                     }
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine($"[API] HTTP Hata: {response.StatusCode}");
+                    Debug.WriteLine($"[API] HTTP Hata: {response.StatusCode}");
                     try
                     {
-                        return JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true
-                        });
+                        return JsonSerializer.Deserialize<T>(content, _jsonOptions);
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine($"[API] Hata yanıtı parse hatası: {ex.Message}");
+                        Debug.WriteLine($"[API] Hata yanıtı parse hatası: {ex.Message}");
                         return default;
                     }
                 }
             }
             catch (HttpRequestException ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[API] HTTP İstek hatası: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"[API] İç hata: {ex.InnerException?.Message}");
+                Debug.WriteLine($"[API] HTTP İstek hatası: {ex.Message}");
+                Debug.WriteLine($"[API] İç hata: {ex.InnerException?.Message}");
                 return default;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[API] Genel hata: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"[API] Stack trace: {ex.StackTrace}");
+                Debug.WriteLine($"[API] Genel hata: {ex.Message}");
+                Debug.WriteLine($"[API] Stack trace: {ex.StackTrace}");
                 return default;
             }
         }
@@ -267,14 +264,16 @@ namespace NyxLine.MAUI.Services
 
         public async Task<List<Post>?> GetFeedAsync(int page = 1, int pageSize = 10)
         {
-            System.Diagnostics.Debug.WriteLine($"ApiService: GetFeedAsync called - page={page}, pageSize={pageSize}");
+            Debug.WriteLine($"ApiService: GetFeedAsync called - page={page}, pageSize={pageSize}");
             var result = await SendAsync<List<Post>>(HttpMethod.Get, $"/posts/feed?page={page}&pageSize={pageSize}");
-            System.Diagnostics.Debug.WriteLine($"ApiService: GetFeedAsync result - {result?.Count ?? 0} posts returned");
+            Debug.WriteLine($"ApiService: GetFeedAsync result - {result?.Count ?? 0} posts returned");
             if (result != null)
             {
+                // Sadece normal gönderileri filtrele
+                result = result.Where(p => p.Type == PostType.Regular).ToList();
                 foreach (var post in result)
                 {
-                    System.Diagnostics.Debug.WriteLine($"ApiService: Post - ID:{post.Id}, Content:'{post.Content}', User:{post.UserFullName}");
+                    Debug.WriteLine($"ApiService: Post - ID:{post.Id}, Type:{post.Type}, Content:'{post.Content}', User:{post.UserFullName}");
                 }
             }
             return result;
@@ -288,6 +287,29 @@ namespace NyxLine.MAUI.Services
         public async Task<MessageResponse?> UnlikePostAsync(int postId)
         {
             return await SendAsync<MessageResponse>(HttpMethod.Delete, $"/posts/{postId}/like");
+        }
+
+        public async Task<List<Post>?> GetNewsAsync(int page = 1, int pageSize = 20)
+        {
+            return await SendAsync<List<Post>>(HttpMethod.Get, $"/news?page={page}&pageSize={pageSize}");
+        }
+
+        // Admin methods
+        public async Task<PostResponse?> CreateNewsAsync(CreatePostRequest request)
+        {
+            // Haber tipi olarak ayarla
+            request.Type = PostType.News;
+            return await SendAsync<PostResponse>(HttpMethod.Post, "/admin/news", request);
+        }
+
+        public async Task<MessageResponse?> AdminDeletePostAsync(int postId)
+        {
+            return await SendAsync<MessageResponse>(HttpMethod.Delete, $"/admin/posts/{postId}");
+        }
+
+        public async Task<List<Post>?> GetAllPostsForAdminAsync(int page = 1, int pageSize = 20)
+        {
+            return await SendAsync<List<Post>>(HttpMethod.Get, $"/admin/posts?page={page}&pageSize={pageSize}");
         }
     }
 } 

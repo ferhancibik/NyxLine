@@ -18,6 +18,16 @@ namespace NyxLine.API.Models
         
         public bool IsGhost { get; set; } = false;
         
+        public bool IsAdmin { get; set; } = false;
+        
+        public bool IsBanned { get; set; } = false;
+        
+        public DateTime? BannedAt { get; set; }
+        
+        public string? BannedBy { get; set; }
+        
+        public string? BanReason { get; set; }
+        
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

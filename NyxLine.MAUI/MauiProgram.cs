@@ -37,6 +37,8 @@ public static class MauiProgram
         builder.Services.AddTransient<ForgotPasswordPage>();
         builder.Services.AddTransient<ResetPasswordPage>();
         builder.Services.AddTransient<UserProfilePage>();
+        builder.Services.AddTransient<EditProfilePage>();
+        builder.Services.AddTransient<NewsPage>();
 
 
 

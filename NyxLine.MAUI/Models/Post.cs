@@ -2,6 +2,12 @@ using System.Text.Json.Serialization;
 
 namespace NyxLine.MAUI.Models
 {
+    public enum PostType
+    {
+        Regular = 0,
+        News = 1
+    }
+
     public class Post
     {
         [JsonPropertyName("id")]
@@ -34,6 +40,15 @@ namespace NyxLine.MAUI.Models
         [JsonPropertyName("createdAt")]
         public DateTime CreatedAt { get; set; }
 
+        [JsonPropertyName("type")]
+        public PostType Type { get; set; } = PostType.Regular;
+
+        [JsonPropertyName("newsTitle")]
+        public string? NewsTitle { get; set; }
+
+        [JsonPropertyName("isUserAdmin")]
+        public bool IsUserAdmin { get; set; }
+
         public string PostImageUrl => string.IsNullOrEmpty(ImagePath) 
             ? string.Empty 
             : $"http://localhost:8080{ImagePath}?v={Guid.NewGuid()}&t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
@@ -41,6 +56,14 @@ namespace NyxLine.MAUI.Models
         public string UserProfileImageUrl => string.IsNullOrEmpty(UserProfileImage) 
             ? "https://via.placeholder.com/40x40/cccccc/ffffff?text=👤" 
             : $"http://localhost:8080{UserProfileImage}?v={Guid.NewGuid()}&t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+
+        public bool HasImage => !string.IsNullOrEmpty(ImagePath);
+
+        public bool HasUserProfileImage => !string.IsNullOrEmpty(UserProfileImage);
+
+        public string LikeImageSource => IsLikedByCurrentUser 
+            ? "heart_filled.png" 
+            : "heart_outline.png";
 
         public string TimeAgo
         {

@@ -28,6 +28,9 @@ namespace NyxLine.MAUI.Models
         [JsonPropertyName("isGhost")]
         public bool IsGhost { get; set; }
 
+        [JsonPropertyName("isAdmin")]
+        public bool IsAdmin { get; set; }
+
         [JsonPropertyName("postsCount")]
         public int PostsCount { get; set; }
 

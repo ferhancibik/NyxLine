@@ -59,6 +59,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -101,6 +102,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+// Seed admin user
+using (var scope = app.Services.CreateScope())
+{
+    await NyxLine.API.Data.AdminSeeder.SeedAdminAsync(app.Services);
+}
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -350,12 +357,14 @@ app.MapGet("/api/users/{userId}/posts", async (string userId, int page, int page
     return Results.Ok(posts);
 }).WithTags("Posts");
 
-app.MapGet("/api/posts/feed", async (int page, int pageSize, IPostService postService) =>
+app.MapGet("/api/posts/feed", async (int page, int pageSize, IPostService postService, ClaimsPrincipal user) =>
 {
-    // Geçici: Tamamen public endpoint, herkes tüm gönderileri görebilir
-    var posts = await postService.GetAllPostsAsync(null, page, pageSize);
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    var posts = await postService.GetFeedAsync(userId, page, pageSize);
     return Results.Ok(posts);
-}).WithTags("Posts");
+}).RequireAuthorization().WithTags("Posts");
 
 app.MapPost("/api/posts/{postId:int}/like", async (int postId, IPostService postService, ClaimsPrincipal user) =>
 {
@@ -382,6 +391,151 @@ app.MapDelete("/api/posts/{postId:int}/like", async (int postId, IPostService po
     }
     return Results.BadRequest(new { message = result.Message });
 }).RequireAuthorization().WithTags("Posts");
+
+// NEWS ENDPOINTS
+app.MapGet("/api/news", async (int page, int pageSize, IAdminService adminService) =>
+{
+    var news = await adminService.GetNewsAsync(page, pageSize);
+    return Results.Ok(news);
+}).WithTags("News");
+
+// Admin haber ekleme endpoint'i
+app.MapPost("/api/admin/news", async (CreatePostDto dto, IAdminService adminService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    if (!await adminService.IsAdminAsync(userId))
+        return Results.Forbid();
+    
+    var result = await adminService.CreateNewsAsync(userId, dto);
+    if (result != null)
+    {
+        return Results.Ok(new { message = "Haber başarıyla oluşturuldu", post = result });
+    }
+    return Results.BadRequest(new { message = "Haber oluşturulamadı" });
+}).RequireAuthorization().WithTags("Admin");
+
+// ADMIN ENDPOINTS
+app.MapGet("/api/admin/posts", async (int page, int pageSize, IAdminService adminService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    if (!await adminService.IsAdminAsync(userId))
+        return Results.Forbid();
+    
+    var posts = await adminService.GetAllPostsAsync(page, pageSize);
+    return Results.Ok(posts);
+}).RequireAuthorization().WithTags("Admin");
+
+app.MapDelete("/api/admin/posts/{postId:int}", async (int postId, IAdminService adminService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    if (!await adminService.IsAdminAsync(userId))
+        return Results.Forbid();
+    
+    var result = await adminService.DeletePostAsync(postId);
+    if (result)
+    {
+        return Results.Ok(new { message = "Gönderi başarıyla silindi" });
+    }
+    return Results.BadRequest(new { message = "Gönderi silinemedi" });
+}).RequireAuthorization().WithTags("Admin");
+
+app.MapGet("/api/admin/users", async (int page, int pageSize, IAdminService adminService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    if (!await adminService.IsAdminAsync(userId))
+        return Results.Forbid();
+    
+    var users = await adminService.GetAllUsersAsync(page, pageSize);
+    return Results.Ok(users);
+}).RequireAuthorization().WithTags("Admin");
+
+app.MapPost("/api/admin/users/ban", async (AdminBanUserDto dto, IAdminService adminService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    if (!await adminService.IsAdminAsync(userId))
+        return Results.Forbid();
+    
+    var result = await adminService.BanUserAsync(userId, dto);
+    if (result)
+    {
+        return Results.Ok(new { message = "Kullanıcı başarıyla banlandı" });
+    }
+    return Results.BadRequest(new { message = "Kullanıcı banlanamadı" });
+}).RequireAuthorization().WithTags("Admin");
+
+app.MapPost("/api/admin/users/unban", async (AdminUnbanUserDto dto, IAdminService adminService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    if (!await adminService.IsAdminAsync(userId))
+        return Results.Forbid();
+    
+    var result = await adminService.UnbanUserAsync(userId, dto);
+    if (result)
+    {
+        return Results.Ok(new { message = "Kullanıcının banı başarıyla kaldırıldı" });
+    }
+    return Results.BadRequest(new { message = "Kullanıcının banı kaldırılamadı" });
+}).RequireAuthorization().WithTags("Admin");
+
+app.MapDelete("/api/admin/users/{targetUserId}", async (string targetUserId, IAdminService adminService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    if (!await adminService.IsAdminAsync(userId))
+        return Results.Forbid();
+    
+    var result = await adminService.DeleteUserAsync(userId, targetUserId);
+    if (result)
+    {
+        return Results.Ok(new { message = "Kullanıcı başarıyla silindi" });
+    }
+    return Results.BadRequest(new { message = "Kullanıcı silinemedi" });
+}).RequireAuthorization().WithTags("Admin");
+
+app.MapPost("/api/admin/users/{targetUserId}/make-admin", async (string targetUserId, IAdminService adminService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    if (!await adminService.IsAdminAsync(userId))
+        return Results.Forbid();
+    
+    var result = await adminService.MakeAdminAsync(userId, targetUserId);
+    if (result)
+    {
+        return Results.Ok(new { message = "Kullanıcı başarıyla admin yapıldı" });
+    }
+    return Results.BadRequest(new { message = "Kullanıcı admin yapılamadı" });
+}).RequireAuthorization().WithTags("Admin");
+
+app.MapPost("/api/admin/users/{targetUserId}/remove-admin", async (string targetUserId, IAdminService adminService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    if (!await adminService.IsAdminAsync(userId))
+        return Results.Forbid();
+    
+    var result = await adminService.RemoveAdminAsync(userId, targetUserId);
+    if (result)
+    {
+        return Results.Ok(new { message = "Kullanıcının admin yetkisi başarıyla kaldırıldı" });
+    }
+    return Results.BadRequest(new { message = "Kullanıcının admin yetkisi kaldırılamadı" });
+}).RequireAuthorization().WithTags("Admin");
 
 // TEST ENDPOINT - Profil fotoğrafı test için
 app.MapPost("/api/test/profile-photo", async (IUserService userService, ClaimsPrincipal user) =>

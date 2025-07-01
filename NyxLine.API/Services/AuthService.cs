@@ -215,7 +215,8 @@ namespace NyxLine.API.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName ?? ""),
                 new Claim(ClaimTypes.Email, user.Email ?? ""),
-                new Claim("IsGhost", user.IsGhost.ToString())
+                new Claim("IsGhost", user.IsGhost.ToString()),
+                new Claim("IsAdmin", user.IsAdmin.ToString())
             };
 
             var token = new JwtSecurityToken(

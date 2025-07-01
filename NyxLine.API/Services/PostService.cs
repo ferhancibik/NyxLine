@@ -165,7 +165,10 @@ namespace NyxLine.API.Services
                 UserProfileImage = post.User.ProfileImagePath,
                 LikeCount = post.Likes.Count,
                 IsLikedByCurrentUser = isLiked,
-                CreatedAt = post.CreatedAt
+                CreatedAt = post.CreatedAt,
+                Type = post.Type,
+                NewsTitle = post.NewsTitle,
+                IsUserAdmin = post.User.IsAdmin
             };
         }
 
@@ -201,7 +204,10 @@ namespace NyxLine.API.Services
                     UserProfileImage = post.User.ProfileImagePath,
                     LikeCount = post.Likes.Count,
                     IsLikedByCurrentUser = isLiked,
-                    CreatedAt = post.CreatedAt
+                    CreatedAt = post.CreatedAt,
+                    Type = post.Type,
+                    NewsTitle = post.NewsTitle,
+                    IsUserAdmin = post.User.IsAdmin
                 });
             }
 
@@ -226,14 +232,15 @@ namespace NyxLine.API.Services
             {
                 postsQuery = _context.Posts
                     .Include(p => p.User)
-                    .Include(p => p.Likes);
+                    .Include(p => p.Likes)
+                    .Where(p => p.Type == PostType.Regular); // Sadece normal gönderiler
             }
             else
             {
                 postsQuery = _context.Posts
                     .Include(p => p.User)
                     .Include(p => p.Likes)
-                    .Where(p => followedUserIds.Contains(p.UserId));
+                    .Where(p => followedUserIds.Contains(p.UserId) && p.Type == PostType.Regular); // Sadece normal gönderiler
             }
 
             var posts = await postsQuery
@@ -245,6 +252,9 @@ namespace NyxLine.API.Services
             var postDtos = new List<PostResponseDto>();
             foreach (var post in posts)
             {
+                // Haber tipindeki gönderileri atla
+                if (post.Type == PostType.News) continue;
+
                 bool isLiked = await _context.Likes
                     .AnyAsync(l => l.PostId == post.Id && l.UserId == userId);
 
@@ -259,7 +269,10 @@ namespace NyxLine.API.Services
                     UserProfileImage = post.User.ProfileImagePath,
                     LikeCount = post.Likes.Count,
                     IsLikedByCurrentUser = isLiked,
-                    CreatedAt = post.CreatedAt
+                    CreatedAt = post.CreatedAt,
+                    Type = post.Type,
+                    NewsTitle = post.NewsTitle,
+                    IsUserAdmin = post.User.IsAdmin
                 });
             }
 
@@ -331,6 +344,7 @@ namespace NyxLine.API.Services
             var posts = await _context.Posts
                 .Include(p => p.User)
                 .Include(p => p.Likes)
+                .Where(p => p.Type == PostType.Regular) // Sadece normal gönderiler
                 .OrderByDescending(p => p.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -357,7 +371,8 @@ namespace NyxLine.API.Services
                     UserProfileImage = post.User.ProfileImagePath,
                     LikeCount = post.Likes.Count,
                     IsLikedByCurrentUser = isLiked,
-                    CreatedAt = post.CreatedAt
+                    CreatedAt = post.CreatedAt,
+                    Type = post.Type
                 });
             }
 

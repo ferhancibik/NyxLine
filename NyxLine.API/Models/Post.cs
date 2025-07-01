@@ -3,6 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NyxLine.API.Models
 {
+    public enum PostType
+    {
+        Regular = 0,
+        News = 1
+    }
+
     public class Post
     {
         [Key]
@@ -16,6 +22,11 @@ namespace NyxLine.API.Models
         
         [Required]
         public string UserId { get; set; } = string.Empty;
+        
+        public PostType Type { get; set; } = PostType.Regular;
+        
+        [MaxLength(200)]
+        public string? NewsTitle { get; set; }
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         

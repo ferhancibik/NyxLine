@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using NyxLine.API.Models;
 
 namespace NyxLine.API.DTOs
 {
@@ -13,6 +14,11 @@ namespace NyxLine.API.DTOs
         // MAUI'den base64 string olarak gönderilen resim için
         public string? ImageBase64 { get; set; }
         public string? FileName { get; set; }
+        
+        public PostType Type { get; set; } = PostType.Regular;
+        
+        [MaxLength(200, ErrorMessage = "Haber başlığı en fazla 200 karakter olabilir")]
+        public string? NewsTitle { get; set; }
     }
 
     public class PostResponseDto
@@ -27,6 +33,9 @@ namespace NyxLine.API.DTOs
         public int LikeCount { get; set; }
         public bool IsLikedByCurrentUser { get; set; }
         public DateTime CreatedAt { get; set; }
+        public PostType Type { get; set; }
+        public string? NewsTitle { get; set; }
+        public bool IsUserAdmin { get; set; }
     }
 
     public class UpdatePostDto
@@ -34,5 +43,23 @@ namespace NyxLine.API.DTOs
         [Required(ErrorMessage = "İçerik zorunludur")]
         [MaxLength(2000, ErrorMessage = "İçerik en fazla 2000 karakter olabilir")]
         public string Content { get; set; } = string.Empty;
+        
+        [MaxLength(200, ErrorMessage = "Haber başlığı en fazla 200 karakter olabilir")]
+        public string? NewsTitle { get; set; }
+    }
+
+    public class AdminBanUserDto
+    {
+        [Required(ErrorMessage = "Kullanıcı ID'si zorunludur")]
+        public string UserId { get; set; } = string.Empty;
+        
+        [MaxLength(500, ErrorMessage = "Ban sebebi en fazla 500 karakter olabilir")]
+        public string? Reason { get; set; }
+    }
+
+    public class AdminUnbanUserDto
+    {
+        [Required(ErrorMessage = "Kullanıcı ID'si zorunludur")]
+        public string UserId { get; set; } = string.Empty;
     }
 } 

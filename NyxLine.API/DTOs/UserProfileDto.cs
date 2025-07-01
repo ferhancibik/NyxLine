@@ -12,6 +12,7 @@ namespace NyxLine.API.DTOs
         public string? Bio { get; set; }
         public string? ProfileImagePath { get; set; }
         public bool IsGhost { get; set; }
+        public bool IsAdmin { get; set; }
         public int PostsCount { get; set; }
         public int FollowersCount { get; set; }
         public int FollowingCount { get; set; }

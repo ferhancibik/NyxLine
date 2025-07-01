@@ -55,190 +55,89 @@
                      IsRefreshing="{Binding IsRefreshing}"
                      Command="{Binding RefreshCommand}"
                      RefreshColor="#007acc">
-            <CollectionView x:Name="PostsCollectionView" 
-                          ItemsSource="{Binding Posts}"
-                          BackgroundColor="#f8f9fa"
-                          SelectionMode="None"
-                          VerticalScrollBarVisibility="Never">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <!-- Instagram Style Post Card -->
-                        <Grid Padding="0" BackgroundColor="#f8f9fa">
-                            <Frame BackgroundColor="White" 
-                                   CornerRadius="8" 
-                                   Padding="0"
-                                   HasShadow="True"
-                                   BorderColor="#e1e8ed"
-                                   Margin="10,5,10,10">
-                                <StackLayout Spacing="0">
-                                    
-                                    <!-- Post Header -->
-                                    <StackLayout Orientation="Horizontal" 
-                                               Spacing="12" 
-                                               Padding="16,12,16,12"
-                                               BackgroundColor="White">
-                                        <!-- User Profile Image -->
-                                        <Frame WidthRequest="40" 
-                                               HeightRequest="40" 
-                                               CornerRadius="20" 
-                                               Padding="0"
-                                               HasShadow="False"
-                                               IsClippedToBounds="True"
-                                               BorderColor="#e1e8ed">
-                                            <Image Source="{Binding UserProfileImageUrl}" 
-                                                   Aspect="AspectFill" />
-                                        </Frame>
-                                        
-                                        <!-- User Info -->
-                                        <StackLayout VerticalOptions="Center" Spacing="2" FlexLayout.Grow="1">
-                                            <Label Text="{Binding UserFullName}" 
-                                                   FontAttributes="Bold" 
-                                                   FontSize="15" 
-                                                   TextColor="#262626" />
-                                            <Label Text="{Binding TimeAgo}" 
-                                                   FontSize="12" 
-                                                   TextColor="#8e8e8e" />
-                                        </StackLayout>
-                                        
-                                        <!-- More Options -->
-                                        <Label Text="⋯" 
-                                               FontSize="18" 
-                                               TextColor="#8e8e8e"
-                                               VerticalOptions="Center"
-                                               Padding="8">
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Tapped="OnMoreOptionsClicked" />
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                    </StackLayout>
-                                    
-                                    <!-- Post Content -->
-                                    <StackLayout Padding="16,0,16,12" IsVisible="{Binding Content, Converter={StaticResource StringToVisibilityConverter}}">
-                                        <Label Text="{Binding Content}" 
-                                               FontSize="14" 
-                                               TextColor="#262626"
-                                               LineBreakMode="WordWrap" />
-                                    </StackLayout>
-                                    
-                                    <!-- Empty Content Placeholder -->
-                                    <StackLayout Padding="16,0,16,12" IsVisible="{Binding Content, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=invert}">
-                                        <Label Text="📝 Henüz açıklama eklenmemiş..." 
-                                               FontSize="14" 
-                                               TextColor="#8e8e8e"
-                                               FontAttributes="Italic"
-                                               LineBreakMode="WordWrap" />
-                                    </StackLayout>
-                                    
-                                    <!-- Gerçek Post Image -->
-                                    <Image Source="{Binding PostImageUrl}" 
-                                           Aspect="AspectFill"
-                                           HeightRequest="300"
-                                           IsVisible="{Binding ImagePath, Converter={StaticResource ImagePathToVisibilityConverter}}"
-                                           BackgroundColor="#f0f0f0" />
-                                    
-                                    <!-- Fotoğraf Yok Placeholder -->
-                                    <Frame CornerRadius="0" 
-                                           Padding="0" 
-                                           BackgroundColor="#f0f0f0"
-                                           HasShadow="False"
-                                           HeightRequest="300"
-                                           Margin="0"
-                                           IsVisible="{Binding ImagePath, Converter={StaticResource ImagePathToVisibilityConverter}, ConverterParameter=invert}">
-                                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                                            <Label Text="📷" 
-                                                   FontSize="48" 
-                                                   TextColor="#ccc"
-                                                   HorizontalOptions="Center" />
-                                            <Label Text="Fotoğraf yok" 
-                                                   FontSize="14" 
-                                                   TextColor="#ccc"
-                                                   HorizontalOptions="Center" />
-                                        </StackLayout>
-                                    </Frame>
-                                    
-                                    <!-- Action Buttons -->
-                                    <StackLayout Orientation="Horizontal" 
-                                               Spacing="16" 
-                                               Padding="16,12,16,8">
-                                        <!-- Like Button -->
-                                        <Button Text="{Binding IsLikedByCurrentUser, Converter={StaticResource LikeButtonConverter}}" 
-                                                BackgroundColor="Transparent" 
-                                                TextColor="{Binding IsLikedByCurrentUser, Converter={StaticResource LikeColorConverter}}"
-                                                FontSize="24"
-                                                Padding="0"
-                                                WidthRequest="30"
+            <ScrollView>
+                <VerticalStackLayout Spacing="10" Padding="10">
+                    <!-- Normal Gönderiler -->
+                    <CollectionView ItemsSource="{Binding Posts}"
+                                  RemainingItemsThreshold="2"
+                                  RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BorderColor="LightGray"
+                                       CornerRadius="10"
+                                       Margin="0,5"
+                                       Padding="10">
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                                        <!-- Post İçeriği -->
+                                        <Label Grid.Row="0"
+                                               Text="{Binding Content}"
+                                               FontSize="16"
+                                               Margin="0,0,0,10"/>
+
+                                        <!-- Post Görseli -->
+                                        <Image Grid.Row="1"
+                                               Source="{Binding PostImageUrl}"
+                                               HeightRequest="200"
+                                               Aspect="AspectFill"
+                                               IsVisible="{Binding HasImage}"
+                                               Margin="0,0,0,10"/>
+
+                                        <!-- Post Detayları -->
+                                        <Grid Grid.Row="2" 
+                                              ColumnDefinitions="Auto,*,Auto">
+                                            <!-- Kullanıcı Profil Resmi -->
+                                            <Frame Grid.Column="0"
+                                                   HeightRequest="40"
+                                                   WidthRequest="40"
+                                                   CornerRadius="20"
+                                                   Padding="0"
+                                                   IsClippedToBounds="True"
+                                                   BorderColor="LightGray"
+                                                   IsVisible="{Binding HasUserProfileImage}">
+                                                <Image Source="{Binding UserProfileImageUrl}"/>
+                                            </Frame>
+                                            
+                                            <!-- Kullanıcı Bilgileri -->
+                                            <VerticalStackLayout Grid.Column="1"
+                                                               Margin="10,0">
+                                                <Label Text="{Binding UserFullName}"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding TimeAgo}"
+                                                       FontSize="12"
+                                                       TextColor="Gray"/>
+                                            </VerticalStackLayout>
+                                            
+                                            <!-- Beğeni Sayısı -->
+                                            <HorizontalStackLayout Grid.Column="2"
+                                                                 Spacing="5">
+                                                <ImageButton Source="{Binding LikeImageSource}"
+                                                            HeightRequest="24"
+                                                            WidthRequest="24"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LikeCommand}"
+                                                            CommandParameter="{Binding .}"/>
+                                                <Label Text="{Binding LikeCount}"
+                                                       VerticalOptions="Center"/>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+
+                                        <!-- Admin için silme butonu -->
+                                        <Button Grid.Row="3"
+                                                Text="Sil"
+                                                IsVisible="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.IsAdmin}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeletePostCommand}"
+                                                CommandParameter="{Binding Id}"
+                                                BackgroundColor="Red"
+                                                TextColor="White"
                                                 HeightRequest="30"
-                                                Clicked="OnLikeClicked" />
-                                        
-                                        <!-- Comment Button -->
-                                        <Button Text="💬" 
-                                                BackgroundColor="Transparent" 
-                                                TextColor="#262626"
-                                                FontSize="24"
-                                                Padding="0"
-                                                WidthRequest="30"
-                                                HeightRequest="30"
-                                                Clicked="OnCommentClicked" />
-                                        
-                                        <!-- Share Button -->
-                                        <Button Text="📤" 
-                                                BackgroundColor="Transparent" 
-                                                TextColor="#262626"
-                                                FontSize="24"
-                                                Padding="0"
-                                                WidthRequest="30"
-                                                HeightRequest="30"
-                                                Clicked="OnShareClicked" />
-                                    </StackLayout>
-                                    
-                                    <!-- Like Count & Info -->
-                                    <StackLayout Padding="16,0,16,12" Spacing="4">
-                                        <Label IsVisible="{Binding LikeCount, Converter={StaticResource PositiveNumberToVisibilityConverter}}"
-                                               FontSize="14" 
-                                               TextColor="#262626"
-                                               FontAttributes="Bold">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="{Binding LikeCount}" />
-                                                    <Span Text=" beğeni" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                        
-                                        <!-- Debug Info -->
-                                        <Label Text="{Binding Id, StringFormat='Gönderi #{0}'}" 
-                                               FontSize="11" 
-                                               TextColor="#8e8e8e" />
-                                        <Label Text="{Binding ImagePath, StringFormat='Resim: {0}'}" 
-                                               FontSize="11" 
-                                               TextColor="#8e8e8e" 
-                                               IsVisible="{Binding ImagePath, Converter={StaticResource ImagePathToVisibilityConverter}}" />
-                                    </StackLayout>
-                                    
-                                </StackLayout>
-                            </Frame>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-                
-                <!-- Empty State -->
-                <CollectionView.EmptyView>
-                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20" Padding="40">
-                        <Label Text="📱" FontSize="60" HorizontalOptions="Center" TextColor="#ccc" />
-                        <Label Text="Henüz gönderi yok!" 
-                               FontSize="18" 
-                               FontAttributes="Bold"
-                               TextColor="#8e8e8e"
-                               HorizontalOptions="Center" />
-                        <Label Text="İlk gönderini oluşturmak için 'Gönderi' sekmesine git!" 
-                               FontSize="14" 
-                               TextColor="#8e8e8e"
-                               HorizontalOptions="Center"
-                               HorizontalTextAlignment="Center" />
-                    </StackLayout>
-                </CollectionView.EmptyView>
-                
-            </CollectionView>
+                                                Margin="0,10,0,0"
+                                                HorizontalOptions="End"/>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
         </RefreshView>
         
         <!-- Loading Indicator -->

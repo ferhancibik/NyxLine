@@ -30,6 +30,10 @@
             <ShellContent ContentTemplate="{DataTemplate local:FeedPage}" />
         </Tab>
         
+        <Tab Title="Haberler" Icon="news.png">
+            <ShellContent ContentTemplate="{DataTemplate local:NewsPage}" />
+        </Tab>
+        
         <Tab Title="Arama" Icon="search.png">
             <ShellContent ContentTemplate="{DataTemplate local:SearchPage}" />
         </Tab>

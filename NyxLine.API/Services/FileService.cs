@@ -51,7 +51,6 @@ namespace NyxLine.API.Services
             }
         }
 
-        // YENİ: Base64 byte array'inden dosya kaydetme
         public async Task<string?> SaveFileFromBytesAsync(byte[] fileBytes, string fileName, string folder)
         {
             try
@@ -102,6 +101,32 @@ namespace NyxLine.API.Services
             }
         }
 
+        public async Task<string?> SaveBase64ImageAsync(string base64String, string folder, string? fileName = null)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(base64String))
+                    return null;
+
+                // Remove data:image/jpeg;base64, prefix if exists
+                var base64Data = base64String;
+                if (base64Data.Contains(","))
+                {
+                    base64Data = base64Data.Split(',')[1];
+                }
+
+                var fileBytes = Convert.FromBase64String(base64Data);
+                var safeFileName = fileName ?? "image.jpg";
+                
+                return await SaveFileFromBytesAsync(fileBytes, safeFileName, folder);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving base64 image");
+                return null;
+            }
+        }
+
         public void DeleteFile(string filePath)
         {
             try
@@ -119,6 +144,11 @@ namespace NyxLine.API.Services
             {
                 _logger.LogError(ex, "Error deleting file: {FilePath}", filePath);
             }
+        }
+
+        public async Task DeleteFileAsync(string filePath)
+        {
+            await Task.Run(() => DeleteFile(filePath));
         }
 
         public bool IsValidImageFile(IFormFile file)

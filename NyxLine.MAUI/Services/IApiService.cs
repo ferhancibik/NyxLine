@@ -16,10 +16,10 @@ namespace NyxLine.MAUI.Services
         Task<User?> GetCurrentUserProfileAsync();
         Task<User?> GetUserByUsernameAsync(string username);
         Task<MessageResponse?> UpdateProfileAsync(UpdateProfileRequest request);
-            Task<List<User>?> SearchUsersAsync(string query);
-    Task<MessageResponse?> FollowUserAsync(string userId);
-    Task<MessageResponse?> UnfollowUserAsync(string userId);
-    Task<User?> GetUserProfileAsync(string userId);
+        Task<List<User>?> SearchUsersAsync(string query);
+        Task<MessageResponse?> FollowUserAsync(string userId);
+        Task<MessageResponse?> UnfollowUserAsync(string userId);
+        Task<User?> GetUserProfileAsync(string username);
         Task<List<User>?> GetFollowersAsync(string userId);
         Task<List<User>?> GetFollowingAsync(string userId);
 
@@ -29,9 +29,15 @@ namespace NyxLine.MAUI.Services
         Task<MessageResponse?> DeletePostAsync(int postId);
         Task<Post?> GetPostByIdAsync(int postId);
         Task<List<Post>?> GetAllPostsAsync(int page = 1, int pageSize = 10);
-        Task<List<Post>?> GetUserPostsAsync(string userId, int page = 1, int pageSize = 10);
-        Task<List<Post>?> GetFeedAsync(int page = 1, int pageSize = 10);
+        Task<List<Post>?> GetUserPostsAsync(string userId, int page = 1, int pageSize = 20);
+        Task<List<Post>?> GetFeedAsync(int page = 1, int pageSize = 20);
         Task<MessageResponse?> LikePostAsync(int postId);
         Task<MessageResponse?> UnlikePostAsync(int postId);
+        Task<List<Post>?> GetNewsAsync(int page = 1, int pageSize = 20);
+        
+        // Admin methods
+        Task<PostResponse?> CreateNewsAsync(CreatePostRequest request);
+        Task<MessageResponse?> AdminDeletePostAsync(int postId);
+        Task<List<Post>?> GetAllPostsForAdminAsync(int page = 1, int pageSize = 20);
     }
 } 
