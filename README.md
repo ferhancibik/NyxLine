@@ -4,6 +4,33 @@
 
 NyxLine, astronomi tutkunlarını bir araya getiren ve Türkiye'deki gözlem noktalarını keşfetmelerini sağlayan modern bir sosyal medya platformudur. .NET MAUI ve ASP.NET Core teknolojileri kullanılarak geliştirilmiştir.
 
+## 📱 Ekran Görüntüleri
+
+### Giriş ve Hesap İşlemleri
+| Giriş | Kayıt | Şifremi Unuttum |
+|-------|-------|-----------------|
+| ![Giriş](docs/images/login.png) | ![Kayıt](docs/images/register.png) | ![Şifremi Unuttum](docs/images/forgot_password.png) |
+
+### Ana Akış ve Arama
+| Ana Sayfa | Gönderi Detay | Arama |
+|-----------|---------------|--------|
+| ![Ana Sayfa](docs/images/feed.png) | ![Gönderi Detay](docs/images/post_detail.png) | ![Arama](docs/images/search.png) |
+
+### Profil ve Güvenlik
+| Profil | Şifre Değiştirme |
+|--------|------------------|
+| ![Profil](docs/images/profile.png) | ![Şifre Değiştirme](docs/images/change_password.png) |
+
+### Gözlem Noktaları
+| Gözlem Noktaları | Nokta Detay |
+|------------------|-------------|
+| ![Gözlem Noktaları](docs/images/observation_sites.png) | ![Nokta Detay](docs/images/site_detail.png) |
+
+### Astronomi
+| Yıldızlar | Astroloji |
+|-----------|-----------|
+| ![Yıldızlar](docs/images/stars.png) | ![Astroloji](docs/images/astrology.png) |
+
 ## 🚀 Özellikler
 
 ### 👥 Kullanıcı Yönetimi
@@ -25,10 +52,11 @@ NyxLine, astronomi tutkunlarını bir araya getiren ve Türkiye'deki gözlem nok
 - Detaylı nokta bilgileri (rakım, ışık kirliliği, ulaşım)
 - Ekipman önerileri
 
-### 👨‍💼 Admin Paneli
-- Kullanıcı yönetimi
-- İçerik moderasyonu
-- Sistem istatistikleri
+### 🌟 Astronomi Özellikleri
+- Yıldız kataloğu ve detaylı bilgiler
+- Astroloji burç yorumları
+- Günlük gök olayları
+- Astronomi haberleri
 
 ## 🛠️ Teknolojiler
 
@@ -57,63 +85,17 @@ NyxLine, astronomi tutkunlarını bir araya getiren ve Türkiye'deki gözlem nok
 ### Adımlar
 1. Repoyu klonlayın:
    ```bash
-   git clone https://github.com/yourusername/NyxLine.git
+   git clone https://github.com/ferhancibik/NyxLine.git
    ```
 
 2. API projesini başlatın:
    ```bash
-   cd NyxLine.API
+   cd NyxLine.API/NyxLine.API
    dotnet run
    ```
 
 3. MAUI projesini Visual Studio'da açın ve çalıştırın.
 
-## 📱 Ekran Görüntüleri
-
-### Giriş ve Kayıt
-| Giriş Sayfası | Kayıt Sayfası |
-|---------------|---------------|
-| ![Login](docs/images/login.png) | ![Register](docs/images/register.png) |
-
-### Ana Akış ve Gönderiler
-| Ana Sayfa | Gönderi Detay |
-|-----------|---------------|
-| ![Feed](docs/images/feed.png) | ![Post Detail](docs/images/post_detail.png) |
-
-### Profil ve Ayarlar
-| Profil Sayfası | Ayarlar |
-|----------------|----------|
-| ![Profile](docs/images/profile.png) | ![Settings](docs/images/settings.png) |
-
-### Gözlem Noktaları
-| Gözlem Noktaları Listesi | Nokta Detayı |
-|--------------------------|---------------|
-| ![Observation Sites](docs/images/observation_sites.png) | ![Site Detail](docs/images/site_detail.png) |
-
-## 🗺️ Yol Haritası
-
-- [ ] Canlı gökyüzü haritası
-- [ ] Gözlem etkinlikleri oluşturma
-- [ ] Astrofotoğrafçılık rehberleri
-- [ ] Teleskop paylaşım platformu
-- [ ] Çoklu dil desteği
-
-## 🤝 Katkıda Bulunma
-
-1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add some AmazingFeature'`)
-4. Branch'inizi push edin (`git push origin feature/AmazingFeature`)
-5. Pull Request oluşturun
-
 ## 📄 Lisans
 
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
-
-## 📞 İletişim
-
-[İletişim bilgileri buraya eklenecek]
-
-## 🌟 Teşekkürler
-
-Bu projeye katkıda bulunan herkese teşekkürler! 
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın. 
