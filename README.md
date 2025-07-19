@@ -70,7 +70,25 @@ NyxLine, astronomi tutkunlarını bir araya getiren ve Türkiye'deki gözlem nok
 
 ## 📱 Ekran Görüntüleri
 
-[Ekran görüntüleri buraya eklenecek]
+### Giriş ve Kayıt
+| Giriş Sayfası | Kayıt Sayfası |
+|---------------|---------------|
+| ![Login](docs/images/login.png) | ![Register](docs/images/register.png) |
+
+### Ana Akış ve Gönderiler
+| Ana Sayfa | Gönderi Detay |
+|-----------|---------------|
+| ![Feed](docs/images/feed.png) | ![Post Detail](docs/images/post_detail.png) |
+
+### Profil ve Ayarlar
+| Profil Sayfası | Ayarlar |
+|----------------|----------|
+| ![Profile](docs/images/profile.png) | ![Settings](docs/images/settings.png) |
+
+### Gözlem Noktaları
+| Gözlem Noktaları Listesi | Nokta Detayı |
+|--------------------------|---------------|
+| ![Observation Sites](docs/images/observation_sites.png) | ![Site Detail](docs/images/site_detail.png) |
 
 ## 🗺️ Yol Haritası
 
