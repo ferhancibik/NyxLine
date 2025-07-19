@@ -7,5 +7,6 @@ namespace NyxLine.MAUI.Models
         public string? FileName { get; set; }
         public string? NewsTitle { get; set; }
         public PostType Type { get; set; } = PostType.Regular;
+        public bool IsPrivate { get; set; } = false;
     }
 } 

@@ -32,7 +32,6 @@ namespace NyxLine.API.Services
         {
             try
             {
-                // Check if user already exists
                 var existingUser = await _userManager.FindByEmailAsync(registrationDto.Email);
                 if (existingUser != null)
                 {
@@ -119,6 +118,19 @@ namespace NyxLine.API.Services
                 if (user == null)
                 {
                     return (false, "Kullanıcı bulunamadı");
+                }
+
+                // Mevcut şifrenin doğruluğunu kontrol et
+                var isCurrentPasswordValid = await _userManager.CheckPasswordAsync(user, changePasswordDto.CurrentPassword);
+                if (!isCurrentPasswordValid)
+                {
+                    return (false, "Mevcut şifre yanlış");
+                }
+
+                // Yeni şifrenin mevcut şifreyle aynı olup olmadığını kontrol et
+                if (changePasswordDto.CurrentPassword == changePasswordDto.NewPassword)
+                {
+                    return (false, "Yeni şifre mevcut şifreyle aynı olamaz");
                 }
 
                 var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);

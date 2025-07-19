@@ -72,6 +72,12 @@ public partial class ChangePasswordPage : ContentPage, INotifyPropertyChanged
             return;
         }
 
+        if (CurrentPassword == NewPassword)
+        {
+            await DisplayAlert("Hata", "Yeni şifre mevcut şifreyle aynı olamaz", "Tamam");
+            return;
+        }
+
         IsBusy = true;
 
         try
@@ -86,8 +92,15 @@ public partial class ChangePasswordPage : ContentPage, INotifyPropertyChanged
             var response = await _apiService.ChangePasswordAsync(request);
             if (response != null)
             {
-                await DisplayAlert("Başarılı", "Şifre başarıyla değiştirildi", "Tamam");
-                await Shell.Current.GoToAsync("..");
+                if (response.Message.Contains("başarıyla"))
+                {
+                    await DisplayAlert("Başarılı", response.Message, "Tamam");
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    await DisplayAlert("Hata", response.Message, "Tamam");
+                }
             }
             else
             {

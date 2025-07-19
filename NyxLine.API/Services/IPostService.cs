@@ -14,5 +14,9 @@ namespace NyxLine.API.Services
         Task<(bool Success, string Message)> LikePostAsync(int postId, string userId);
         Task<(bool Success, string Message)> UnlikePostAsync(int postId, string userId);
         Task<List<PostResponseDto>> GetAllPostsAsync(string? currentUserId = null, int page = 1, int pageSize = 10);
+        
+        // Repost metodları
+        Task<(bool Success, string Message, PostResponseDto? Post)> RepostAsync(int postId, string userId, string? content = null);
+        Task<(bool Success, string Message)> UndoRepostAsync(int postId, string userId);
     }
 } 

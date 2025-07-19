@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NyxLine.MAUI.Views.StarsPage"
+             Title="Yıldızları Tanıyalım"
+             BackgroundColor="#D8D8FF">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="15">
+            
+            <!-- Başlık -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20"
+                   Margin="0,0,0,10">
+                <VerticalStackLayout>
+                    <Label Text="✨ Gökyüzünün Büyülü Dünyası ✨"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="#4B0082"/>
+                    <Label Text="Yıldızlar ve takımyıldızlarının büyüleyici hikayelerini keşfedin"
+                           FontSize="16"
+                           HorizontalOptions="Center"
+                           TextColor="#666666"
+                           Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Takımyıldızları Bölümü -->
+            <Label Text="🌟 Takımyıldızları"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#4B0082"
+                   Margin="10,0"/>
+
+            <CollectionView ItemsSource="{Binding Constellations}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="White"
+                               CornerRadius="15"
+                               Padding="15"
+                               Margin="0,0,0,10">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenConstellationCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+                            
+                            <StackLayout Spacing="10">
+                                <Label Text="{Binding Name}"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="#4B0082"/>
+                                
+                                <Label Text="{Binding ShortDescription}"
+                                       FontSize="16"
+                                       TextColor="#666666"/>
+                                
+                                <Label Text="Hikayeyi Oku ➜"
+                                       FontSize="14"
+                                       TextColor="#007ACC"
+                                       HorizontalOptions="End"/>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Önemli Yıldızlar Bölümü -->
+            <Label Text="⭐ Önemli Yıldızlar"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#4B0082"
+                   Margin="10,20,10,0"/>
+
+            <CollectionView ItemsSource="{Binding ImportantStars}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="White"
+                               CornerRadius="15"
+                               Padding="15"
+                               Margin="0,0,0,10">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenStarCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+                            
+                            <StackLayout Spacing="10">
+                                <Label Text="{Binding Name}"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="#4B0082"/>
+                                
+                                <Label Text="{Binding ShortDescription}"
+                                       FontSize="16"
+                                       TextColor="#666666"/>
+                                
+                                <Label Text="{Binding Constellation, StringFormat='Takımyıldızı: {0}'}"
+                                       FontSize="14"
+                                       TextColor="#666666"/>
+                                
+                                <Label Text="Detayları Gör ➜"
+                                       FontSize="14"
+                                       TextColor="#007ACC"
+                                       HorizontalOptions="End"/>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage> 

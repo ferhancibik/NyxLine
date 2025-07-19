@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:NyxLine.MAUI.Converters"
+             x:Class="NyxLine.MAUI.Views.StarDetailPage"
+             Title="{Binding Name}"
+             BackgroundColor="#D8D8FF">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- Temel Bilgiler -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="{Binding Name}"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="#4B0082"
+                           HorizontalOptions="Center"/>
+                    
+                    <Label Text="{Binding Description}"
+                           FontSize="16"
+                           TextColor="#666666"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Mitolojik Hikaye -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="📚 Mitolojik Hikaye"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#4B0082"/>
+                    
+                    <Label Text="{Binding MythologicalStory}"
+                           FontSize="16"
+                           TextColor="#666666"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Nasıl Bulunur -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="🔭 Nasıl Bulunur?"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#4B0082"/>
+                    
+                    <Label Text="{Binding HowToFind}"
+                           FontSize="16"
+                           TextColor="#666666"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- İlginç Bilgiler -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="💫 İlginç Bilgiler"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#4B0082"/>
+                    
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding InterestingFacts}"
+                                       Spacing="10">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Label Grid.Column="0"
+                                           Text="•"
+                                           FontSize="16"
+                                           TextColor="#4B0082"
+                                           Margin="0,0,10,0"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding .}"
+                                           FontSize="16"
+                                           TextColor="#666666"/>
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Teknik Bilgiler -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20"
+                   IsVisible="{Binding IsConstellation, Converter={StaticResource InverseBoolConverter}}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="📊 Teknik Bilgiler"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#4B0082"/>
+                    
+                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="10">
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="Parlaklık:"
+                               FontAttributes="Bold"
+                               TextColor="#666666"/>
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="{Binding Magnitude}"
+                               TextColor="#666666"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Text="Uzaklık:"
+                               FontAttributes="Bold"
+                               TextColor="#666666"/>
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding DistanceFromEarth, StringFormat='{0} ışık yılı'}"
+                               TextColor="#666666"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Text="En İyi Görünüm:"
+                               FontAttributes="Bold"
+                               TextColor="#666666"/>
+                        <Label Grid.Row="2" Grid.Column="1"
+                               Text="{Binding BestViewingSeason}"
+                               TextColor="#666666"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage> 

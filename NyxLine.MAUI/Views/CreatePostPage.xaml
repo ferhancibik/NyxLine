@@ -3,7 +3,7 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="Yeni Gönderi"
-             BackgroundColor="#f5f5f5">
+             BackgroundColor="#D8D8FF">
     
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -19,40 +19,6 @@
     
     <ScrollView>
         <StackLayout Spacing="20" Padding="20">
-            
-            <!-- Header Section -->
-            <Frame BackgroundColor="White"
-                   CornerRadius="15"
-                   Padding="20"
-                   HasShadow="True">
-                <StackLayout Orientation="Horizontal" Spacing="15">
-                    <!-- Profile Image -->
-                    <Frame WidthRequest="50" 
-                           HeightRequest="50" 
-                           CornerRadius="25" 
-                           Padding="2"
-                           BackgroundColor="#f0f0f0"
-                           HasShadow="False">
-                        <Frame CornerRadius="23" Padding="0" IsClippedToBounds="True">
-                            <Image x:Name="UserProfileImage"
-                                   Source="https://via.placeholder.com/50x50/cccccc/ffffff?text=👤"
-                                   Aspect="AspectFill" />
-                        </Frame>
-                    </Frame>
-                    
-                    <!-- User Info -->
-                    <StackLayout VerticalOptions="Center" Spacing="2">
-                        <Label x:Name="UserNameLabel"
-                               Text="Kullanıcı Adı"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="#333" />
-                        <Label Text="Yeni bir gönderi oluştur"
-                               FontSize="14"
-                               TextColor="#666" />
-                    </StackLayout>
-                </StackLayout>
-            </Frame>
             
             <!-- Content Section -->
             
@@ -81,6 +47,25 @@
                                    TextColor="#888" />
                         </StackLayout>
                         
+                    </StackLayout>
+                </Frame>
+                
+                <!-- Privacy Settings -->
+                <Frame Style="{StaticResource ShadowFrame}">
+                    <StackLayout Padding="20" Spacing="15">
+                        <Label Text="Gizlilik Ayarları"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#333" />
+                        
+                        <HorizontalStackLayout Spacing="10">
+                            <CheckBox x:Name="PrivatePostCheckBox"
+                                    IsChecked="{Binding IsPrivatePost}"
+                                    Color="#007ACC"/>
+                            <Label Text="Sadece takipçilerim görebilsin"
+                                   VerticalOptions="Center"
+                                   TextColor="#666666"/>
+                        </HorizontalStackLayout>
                     </StackLayout>
                 </Frame>
                 

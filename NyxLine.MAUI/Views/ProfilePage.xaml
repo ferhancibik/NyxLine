@@ -5,7 +5,7 @@
              xmlns:converters="clr-namespace:NyxLine.MAUI.Converters"
              x:Name="ProfilePageRoot"
              Title="Profil"
-             BackgroundColor="#f5f5f5">
+             BackgroundColor="#D8D8FF">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -25,9 +25,9 @@
                        HasShadow="True">
                     <StackLayout Spacing="15">
                         
-                        <Frame WidthRequest="100" 
-                               HeightRequest="100" 
-                               CornerRadius="50" 
+                        <Frame WidthRequest="150" 
+                               HeightRequest="150" 
+                               CornerRadius="75" 
                                Padding="0" 
                                HorizontalOptions="Center" 
                                IsClippedToBounds="True"
@@ -220,8 +220,37 @@
                                                            HasShadow="False"
                                                            IsVisible="{Binding ImagePath, Converter={StaticResource ImagePathToVisibilityConverter}}">
                                                         <Image Source="{Binding PostImageUrl}" 
-                                                               HeightRequest="300" 
+                                                               HeightRequest="400" 
+                                                               WidthRequest="400"
                                                                Aspect="AspectFill" />
+                                                    </Frame>
+
+                                                    <!-- Repost Content -->
+                                                    <Frame CornerRadius="10"
+                                                           Padding="15"
+                                                           IsClippedToBounds="True"
+                                                           HasShadow="False"
+                                                           BorderColor="#e0e0e0"
+                                                           IsVisible="{Binding IsRepost}">
+                                                        <StackLayout Spacing="10">
+                                                            <Label Text="{Binding OriginalPost.UserFullName}"
+                                                                   FontSize="14"
+                                                                   FontAttributes="Bold"
+                                                                   TextColor="#262626"/>
+                                                            <Label Text="{Binding OriginalPost.Content}"
+                                                                   FontSize="14"
+                                                                   TextColor="#262626"/>
+                                                            <Frame CornerRadius="10"
+                                                                   Padding="0"
+                                                                   IsClippedToBounds="True"
+                                                                   HasShadow="False"
+                                                                   IsVisible="{Binding OriginalPost.HasImage}">
+                                                                <Image Source="{Binding OriginalPost.PostImageUrl}"
+                                                                       HeightRequest="400"
+                                                                       WidthRequest="400"
+                                                                       Aspect="AspectFill"/>
+                                                            </Frame>
+                                                        </StackLayout>
                                                     </Frame>
 
                                                     <!-- Post Actions -->
@@ -229,6 +258,10 @@
                                                         <Label Text="{Binding LikesCount, StringFormat='❤️ {0}'}" 
                                                                FontSize="12" 
                                                                TextColor="#8e8e8e" />
+                                                        <Label Text="{Binding IsRepost, StringFormat='🔄 Repost'}"
+                                                               FontSize="12"
+                                                               TextColor="#8e8e8e"
+                                                               IsVisible="{Binding IsRepost}"/>
                                                         <Label Text="{Binding Id, StringFormat='Post #{0}'}" 
                                                                FontSize="12" 
                                                                TextColor="#8e8e8e" />

@@ -11,7 +11,7 @@ namespace NyxLine.MAUI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ISecureStorage _secureStorage;
-        private readonly string _baseUrl = "http://localhost:8080/api";
+        private readonly string _baseUrl;
         private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         public ApiService(HttpClient httpClient, ISecureStorage secureStorage)
@@ -25,13 +25,17 @@ namespace NyxLine.MAUI.Services
                 ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
             };
             _httpClient = new HttpClient(handler);
+            _baseUrl = "http://localhost:8080/api";
             #else
             _httpClient = httpClient;
+            _baseUrl = "http://10.0.2.2:8080/api"; // Android emülatör için localhost
             #endif
 
             // HTTP istemcisinin yapılandırması
             _httpClient.Timeout = TimeSpan.FromSeconds(30);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            Debug.WriteLine($"[API] Base URL: {_baseUrl}");
         }
 
         private async Task<string?> GetTokenAsync()
@@ -165,7 +169,25 @@ namespace NyxLine.MAUI.Services
 
         public async Task<MessageResponse?> ChangePasswordAsync(ChangePasswordRequest request)
         {
-            return await SendAsync<MessageResponse>(HttpMethod.Post, "/auth/change-password", request);
+            try
+            {
+                Debug.WriteLine("[API] Şifre değiştirme isteği gönderiliyor");
+                var response = await SendAsync<MessageResponse>(HttpMethod.Post, "/auth/change-password", request);
+                
+                if (response == null)
+                {
+                    Debug.WriteLine("[API] Şifre değiştirme yanıtı null");
+                    return new MessageResponse { Message = "Sunucuyla bağlantı kurulamadı" };
+                }
+
+                Debug.WriteLine($"[API] Şifre değiştirme yanıtı: {response.Message}");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[API] Şifre değiştirme hatası: {ex.Message}");
+                return new MessageResponse { Message = $"Bir hata oluştu: {ex.Message}" };
+            }
         }
 
         public async Task<MessageResponse?> ForgotPasswordAsync(ForgotPasswordRequest request)
@@ -310,6 +332,17 @@ namespace NyxLine.MAUI.Services
         public async Task<List<Post>?> GetAllPostsForAdminAsync(int page = 1, int pageSize = 20)
         {
             return await SendAsync<List<Post>>(HttpMethod.Get, $"/admin/posts?page={page}&pageSize={pageSize}");
+        }
+
+        // Repost methods
+        public async Task<MessageResponse?> RepostAsync(int postId, string? content = null)
+        {
+            return await SendAsync<MessageResponse>(HttpMethod.Post, $"/posts/{postId}/repost", new { content });
+        }
+
+        public async Task<MessageResponse?> UndoRepostAsync(int postId)
+        {
+            return await SendAsync<MessageResponse>(HttpMethod.Delete, $"/posts/{postId}/repost");
         }
     }
 } 

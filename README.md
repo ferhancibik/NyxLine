@@ -1,65 +1,101 @@
-# NyxLine
+# NyxLine - Astronomi Sosyal Medya Platformu 🌟
 
-NyxLine, .NET Core Web API ve .NET MAUI kullanılarak geliştirilmiş bir sosyal medya uygulamasıdır.
+![NyxLine Logo](NyxLine.MAUI/Resources/Images/nyxline_logo.png)
 
-## Özellikler
+NyxLine, astronomi tutkunlarını bir araya getiren ve Türkiye'deki gözlem noktalarını keşfetmelerini sağlayan modern bir sosyal medya platformudur. .NET MAUI ve ASP.NET Core teknolojileri kullanılarak geliştirilmiştir.
 
-- Kullanıcı kaydı ve girişi
-- Profil yönetimi
-- Gönderi paylaşımı
-- Kullanıcı takip sistemi
-- Şifre sıfırlama
+## 🚀 Özellikler
 
-## Teknolojiler
+### 👥 Kullanıcı Yönetimi
+- Kayıt ve giriş sistemi
+- Profil yönetimi ve özelleştirme
+- Şifre değiştirme ve sıfırlama
+- Kullanıcı rolleri (normal kullanıcı, admin)
 
-### Backend (NyxLine.API)
-- ASP.NET Core Web API
+### 📱 Sosyal Medya İşlevleri
+- Gönderi oluşturma ve paylaşma
+- Beğeni ve yorum sistemi
+- Kullanıcı takip mekanizması
+- Gönderi repost özelliği
+- Arama ve keşfet fonksiyonları
+
+### 🔭 Gözlem Noktaları
+- Türkiye'nin en iyi gözlem noktaları veritabanı
+- Konum bazlı yakın nokta önerileri
+- Detaylı nokta bilgileri (rakım, ışık kirliliği, ulaşım)
+- Ekipman önerileri
+
+### 👨‍💼 Admin Paneli
+- Kullanıcı yönetimi
+- İçerik moderasyonu
+- Sistem istatistikleri
+
+## 🛠️ Teknolojiler
+
+### Backend
+- ASP.NET Core 8.0
 - Entity Framework Core
 - SQL Server
 - JWT Authentication
+- REST API
 
-### Mobile (NyxLine.MAUI)
+### Frontend
 - .NET MAUI
-- MVVM Pattern
-- HTTP Client
+- XAML
+- Model-View-ViewModel (MVVM)
+- Responsive Design
 
-## Kurulum
+## 📦 Kurulum
 
-1. API Projesini Çalıştırma:
-```bash
-cd NyxLine.API
-dotnet run
-```
+### Gereksinimler
+- Visual Studio 2022
+- .NET 8.0 SDK
+- SQL Server (LocalDB veya Express)
+- Android SDK (Android geliştirme için)
+- Xcode (iOS geliştirme için, sadece macOS)
 
-2. MAUI Uygulamasını Çalıştırma:
-```bash
-cd NyxLine.MAUI
-dotnet build -t:Run -f net7.0-android
-# veya
-dotnet build -t:Run -f net7.0-ios
-# veya
-dotnet build -t:Run -f net7.0-windows10.0.19041.0
-```
+### Adımlar
+1. Repoyu klonlayın:
+   ```bash
+   git clone https://github.com/yourusername/NyxLine.git
+   ```
 
-## API Endpoints
+2. API projesini başlatın:
+   ```bash
+   cd NyxLine.API
+   dotnet run
+   ```
 
-### Kimlik Doğrulama
-- POST /api/auth/register - Yeni kullanıcı kaydı
-- POST /api/auth/login - Kullanıcı girişi
-- POST /api/auth/forgot-password - Şifre sıfırlama talebi
-- POST /api/auth/reset-password - Şifre sıfırlama
+3. MAUI projesini Visual Studio'da açın ve çalıştırın.
 
-### Kullanıcı İşlemleri
-- GET /api/users/profile - Kullanıcı profili görüntüleme
-- PUT /api/users/profile - Profil güncelleme
-- PUT /api/users/change-password - Şifre değiştirme
+## 📱 Ekran Görüntüleri
 
-### Gönderiler
-- POST /api/posts - Yeni gönderi oluşturma
-- GET /api/posts - Gönderileri listeleme
-- PUT /api/posts/{id} - Gönderi güncelleme
-- DELETE /api/posts/{id} - Gönderi silme
+[Ekran görüntüleri buraya eklenecek]
 
-## Lisans
+## 🗺️ Yol Haritası
 
-Bu proje MIT lisansı altında lisanslanmıştır. 
+- [ ] Canlı gökyüzü haritası
+- [ ] Gözlem etkinlikleri oluşturma
+- [ ] Astrofotoğrafçılık rehberleri
+- [ ] Teleskop paylaşım platformu
+- [ ] Çoklu dil desteği
+
+## 🤝 Katkıda Bulunma
+
+1. Fork edin
+2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Add some AmazingFeature'`)
+4. Branch'inizi push edin (`git push origin feature/AmazingFeature`)
+5. Pull Request oluşturun
+
+## 📄 Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
+
+## 📞 İletişim
+
+[İletişim bilgileri buraya eklenecek]
+
+## 🌟 Teşekkürler
+
+Bu projeye katkıda bulunan herkese teşekkürler! 

@@ -3,29 +3,33 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="Giriş Yap"
-             BackgroundColor="{DynamicResource PageBackgroundColor}">
+             BackgroundColor="#D8D8FF">
     
     <ScrollView>
         <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
             
             <!-- Logo and Title -->
             <StackLayout Spacing="15" HorizontalOptions="Center">
-                <Image Source="nyxline_logo.png"
-                       HeightRequest="120"
-                       WidthRequest="120"
+                <Image Source="D:/Kullanıcılar/ferhan/source/repos/NyxLine.API/NyxLine.MAUI/Resources/Images/nyxline_logo.png"
+                       HeightRequest="200"
+                       WidthRequest="200"
                        Aspect="AspectFit"
-                       HorizontalOptions="Center" />
+                       BackgroundColor="Transparent"
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,10" />
                 
-                <Label Text="NyxLine" 
+                <Label Text="✨ NyxLine ✨" 
                        FontFamily="QuicksandBold"
                        FontSize="48"
                        HorizontalOptions="Center"
-                       TextColor="{DynamicResource Primary}" />
+                       TextColor="{DynamicResource Primary}"
+                       Margin="0,0,0,5" />
                 
-                <Label Text="Gökyüzünün Sosyal Medya Uygulaması" 
+                <Label Text="🌙 Gökyüzünün Sosyal Medya Uygulaması 🌠" 
                        Style="{StaticResource SubtitleStyle}"
                        HorizontalOptions="Center"
-                       TextColor="{DynamicResource Secondary}" />
+                       TextColor="#4B0082"
+                       FontAttributes="Bold" />
             </StackLayout>
 
             <!-- Login Form -->

@@ -18,15 +18,26 @@ public static class MauiProgram
                 fonts.AddFont("Quicksand-Medium.ttf", "QuicksandMedium");
                 fonts.AddFont("Quicksand-SemiBold.ttf", "QuicksandSemiBold");
                 fonts.AddFont("Quicksand-Bold.ttf", "QuicksandBold");
+            })
+            .ConfigureEssentials(essentials =>
+            {
+                essentials.UseVersionTracking();
+            })
+            .ConfigureMauiHandlers(handlers =>
+            {
+                #if WINDOWS
+                handlers.AddHandler<Microsoft.Maui.Controls.Image, Microsoft.Maui.Handlers.ImageHandler>();
+                #endif
             });
 
         // Add HttpClient
         builder.Services.AddHttpClient();
+        builder.Services.AddSingleton<HttpClient>();
 
         // Register services
         builder.Services.AddSingleton<ISecureStorage>(SecureStorage.Default);
-        builder.Services.AddScoped<IApiService, ApiService>();
-        builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddSingleton<IApiService, ApiService>();
+        builder.Services.AddSingleton<IAuthService, AuthService>();
 
         // Register pages
         builder.Services.AddTransient<MainPage>();
@@ -42,8 +53,7 @@ public static class MauiProgram
         builder.Services.AddTransient<UserProfilePage>();
         builder.Services.AddTransient<EditProfilePage>();
         builder.Services.AddTransient<NewsPage>();
-
-
+        builder.Services.AddTransient<AstrologyPage>();
 
 #if DEBUG
         builder.Services.AddLogging(configure => configure.AddDebug());

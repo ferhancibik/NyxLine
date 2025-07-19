@@ -3,7 +3,8 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Name="SearchPageRoot"
-             Title="Arama">
+             Title="Arama"
+             BackgroundColor="#D8D8FF">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -21,7 +22,7 @@
         <!-- Arama Sonuçları -->
         <CollectionView Grid.Row="1" 
                         ItemsSource="{Binding SearchResults}"
-                        BackgroundColor="#F5F5F5">
+                        BackgroundColor="#D8D8FF">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame BackgroundColor="White" 

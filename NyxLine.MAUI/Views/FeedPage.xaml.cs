@@ -49,6 +49,7 @@ public partial class FeedPage : ContentPage, INotifyPropertyChanged
     public ICommand RefreshCommand { get; }
     public ICommand LoadMoreCommand { get; }
     public ICommand LikeCommand { get; }
+    public ICommand RepostCommand { get; }
     public ICommand DeletePostCommand { get; }
 
     public FeedPage(IApiService apiService, IAuthService authService)
@@ -62,6 +63,7 @@ public partial class FeedPage : ContentPage, INotifyPropertyChanged
         RefreshCommand = new Command(async () => await RefreshAsync());
         LoadMoreCommand = new Command(async () => await LoadMoreAsync());
         LikeCommand = new Command<Post>(async (post) => await LikePostAsync(post));
+        RepostCommand = new Command<Post>(async (post) => await RepostAsync(post));
         DeletePostCommand = new Command<int>(async (postId) => await DeletePostAsync(postId));
 
         BindingContext = this;
@@ -170,6 +172,33 @@ public partial class FeedPage : ContentPage, INotifyPropertyChanged
         catch (Exception ex)
         {
             await DisplayAlert("Hata", "Beğeni işlemi sırasında bir hata oluştu", "Tamam");
+        }
+    }
+
+    private async Task RepostAsync(Post post)
+    {
+        try
+        {
+            string? content = null;
+            if (await DisplayAlert("Paylaş", "Bu gönderiyi paylaşmak istiyor musunuz?", "Yorum Ekle", "Direkt Paylaş"))
+            {
+                content = await DisplayPromptAsync("Yorum", "Paylaşırken bir yorum ekleyin:", "Tamam", "İptal");
+                if (content == null) // İptal edildi
+                    return;
+            }
+
+            var response = post.IsRepostedByCurrentUser
+                ? await _apiService.UndoRepostAsync(post.Id)
+                : await _apiService.RepostAsync(post.Id, content);
+
+            if (response?.Message != null)
+            {
+                await RefreshAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Hata", "Paylaşım işlemi sırasında bir hata oluştu", "Tamam");
         }
     }
 

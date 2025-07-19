@@ -36,6 +36,13 @@ namespace NyxLine.API.DTOs
         public PostType Type { get; set; }
         public string? NewsTitle { get; set; }
         public bool IsUserAdmin { get; set; }
+
+        // Repost özellikleri
+        public bool IsRepost { get; set; }
+        public int? OriginalPostId { get; set; }
+        public PostResponseDto? OriginalPost { get; set; }
+        public int RepostCount { get; set; }
+        public bool IsRepostedByCurrentUser { get; set; }
     }
 
     public class UpdatePostDto

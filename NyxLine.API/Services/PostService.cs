@@ -122,7 +122,7 @@ namespace NyxLine.API.Services
                     return (false, "Post bulunamadı veya yetkiniz yok");
                 }
 
-                // Delete associated image if exists
+              
                 if (!string.IsNullOrEmpty(post.ImagePath))
                 {
                     _fileService.DeleteFile(post.ImagePath);
@@ -143,18 +143,25 @@ namespace NyxLine.API.Services
             var post = await _context.Posts
                 .Include(p => p.User)
                 .Include(p => p.Likes)
+                .Include(p => p.OriginalPost)
+                    .ThenInclude(op => op.User)
+                .Include(p => p.Reposts)
                 .FirstOrDefaultAsync(p => p.Id == postId);
 
             if (post == null) return null;
 
             bool isLiked = false;
+            bool isReposted = false;
             if (currentUserId != null)
             {
                 isLiked = await _context.Likes
                     .AnyAsync(l => l.PostId == postId && l.UserId == currentUserId);
+
+                isReposted = await _context.Posts
+                    .AnyAsync(p => p.OriginalPostId == postId && p.UserId == currentUserId);
             }
 
-            return new PostResponseDto
+            var response = new PostResponseDto
             {
                 Id = post.Id,
                 Content = post.Content,
@@ -168,8 +175,30 @@ namespace NyxLine.API.Services
                 CreatedAt = post.CreatedAt,
                 Type = post.Type,
                 NewsTitle = post.NewsTitle,
-                IsUserAdmin = post.User.IsAdmin
+                IsUserAdmin = post.User.IsAdmin,
+                IsRepost = post.IsRepost,
+                OriginalPostId = post.OriginalPostId,
+                RepostCount = post.Reposts.Count,
+                IsRepostedByCurrentUser = isReposted
             };
+
+            if (post.OriginalPost != null)
+            {
+                response.OriginalPost = new PostResponseDto
+                {
+                    Id = post.OriginalPost.Id,
+                    Content = post.OriginalPost.Content,
+                    ImagePath = post.OriginalPost.ImagePath,
+                    UserId = post.OriginalPost.UserId,
+                    UserName = post.OriginalPost.User.UserName ?? "",
+                    UserFullName = $"{post.OriginalPost.User.FirstName} {post.OriginalPost.User.LastName}",
+                    UserProfileImage = post.OriginalPost.User.ProfileImagePath,
+                    CreatedAt = post.OriginalPost.CreatedAt,
+                    Type = post.OriginalPost.Type
+                };
+            }
+
+            return response;
         }
 
         public async Task<List<PostResponseDto>> GetUserPostsAsync(string userId, string? currentUserId = null, int page = 1, int pageSize = 10)
@@ -377,6 +406,80 @@ namespace NyxLine.API.Services
             }
 
             return postDtos;
+        }
+
+        // Repost metodları
+        public async Task<(bool Success, string Message, PostResponseDto? Post)> RepostAsync(int postId, string userId, string? content = null)
+        {
+            try
+            {
+                var originalPost = await _context.Posts
+                    .Include(p => p.User)
+                    .FirstOrDefaultAsync(p => p.Id == postId);
+
+                if (originalPost == null)
+                {
+                    return (false, "Gönderi bulunamadı", null);
+                }
+
+                // Kullanıcının kendi gönderisini repost etmesini engelle
+                if (originalPost.UserId == userId)
+                {
+                    return (false, "Kendi gönderinizi tekrar paylaşamazsınız", null);
+                }
+
+                // Kullanıcının aynı gönderiyi tekrar repost etmesini engelle
+                var existingRepost = await _context.Posts
+                    .FirstOrDefaultAsync(p => p.OriginalPostId == postId && p.UserId == userId);
+
+                if (existingRepost != null)
+                {
+                    return (false, "Bu gönderiyi zaten paylaştınız", null);
+                }
+
+                var repost = new Post
+                {
+                    Content = content ?? string.Empty,
+                    UserId = userId,
+                    OriginalPostId = postId,
+                    Type = PostType.Regular,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+
+                _context.Posts.Add(repost);
+                await _context.SaveChangesAsync();
+
+                var postResponse = await GetPostByIdAsync(repost.Id, userId);
+                return (true, "Gönderi başarıyla paylaşıldı", postResponse);
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Bir hata oluştu: {ex.Message}", null);
+            }
+        }
+
+        public async Task<(bool Success, string Message)> UndoRepostAsync(int postId, string userId)
+        {
+            try
+            {
+                var repost = await _context.Posts
+                    .FirstOrDefaultAsync(p => p.OriginalPostId == postId && p.UserId == userId);
+
+                if (repost == null)
+                {
+                    return (false, "Bu gönderiyi paylaşmamışsınız");
+                }
+
+                _context.Posts.Remove(repost);
+                await _context.SaveChangesAsync();
+
+                return (true, "Paylaşım kaldırıldı");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Bir hata oluştu: {ex.Message}");
+            }
         }
     }
 } 

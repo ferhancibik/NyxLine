@@ -3,47 +3,60 @@
     x:Class="NyxLine.MAUI.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:NyxLine.MAUI.Views"
+    xmlns:local="clr-namespace:NyxLine.MAUI"
+    xmlns:views="clr-namespace:NyxLine.MAUI.Views"
     Title="NyxLine">
 
     <!-- Auth Pages (No tabs) -->
     <ShellContent x:Name="LoginShell" 
                   Route="login"
-                  ContentTemplate="{DataTemplate local:LoginPage}" />
+                  ContentTemplate="{DataTemplate views:LoginPage}" />
 
     <ShellContent x:Name="RegisterShell" 
                   Route="register"
-                  ContentTemplate="{DataTemplate local:RegisterPage}" />
+                  ContentTemplate="{DataTemplate views:RegisterPage}" />
 
     <ShellContent x:Name="ForgotPasswordShell"
                   Route="forgotpassword"
-                  ContentTemplate="{DataTemplate local:ForgotPasswordPage}" />
+                  ContentTemplate="{DataTemplate views:ForgotPasswordPage}" />
 
     <ShellContent x:Name="ResetPasswordShell"
                   Route="resetpassword"
-                  ContentTemplate="{DataTemplate local:ResetPasswordPage}" />
+                  ContentTemplate="{DataTemplate views:ResetPasswordPage}" />
 
     <!-- Main App with Tabs -->
     <TabBar x:Name="MainTabBar" Route="main">
         
         <Tab Title="Ana Sayfa" Icon="home.png">
-            <ShellContent ContentTemplate="{DataTemplate local:FeedPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:FeedPage}" />
         </Tab>
         
         <Tab Title="Haberler" Icon="news.png">
-            <ShellContent ContentTemplate="{DataTemplate local:NewsPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:NewsPage}" />
+        </Tab>
+        
+        <Tab Title="Yıldızlar">
+            <ShellContent ContentTemplate="{DataTemplate views:StarsPage}" />
+        </Tab>
+        
+        <Tab Title="Gözlem">
+            <ShellContent ContentTemplate="{DataTemplate views:ObservationPage}" />
+        </Tab>
+        
+        <Tab Title="Astroloji" Icon="🌟">
+            <ShellContent ContentTemplate="{DataTemplate views:AstrologyPage}" />
         </Tab>
         
         <Tab Title="Arama" Icon="search.png">
-            <ShellContent ContentTemplate="{DataTemplate local:SearchPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:SearchPage}" />
         </Tab>
         
         <Tab Title="Gönderi" Icon="add.png">
-            <ShellContent ContentTemplate="{DataTemplate local:CreatePostPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:CreatePostPage}" />
         </Tab>
         
         <Tab Title="Profil" Icon="profile.png">
-            <ShellContent ContentTemplate="{DataTemplate local:ProfilePage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
         </Tab>
         
     </TabBar>
@@ -51,14 +64,20 @@
     <!-- Additional Pages -->
     <ShellContent x:Name="ChangePasswordShell"
                   Route="changepassword"
-                  ContentTemplate="{DataTemplate local:ChangePasswordPage}" />
+                  ContentTemplate="{DataTemplate views:ChangePasswordPage}" />
                   
     <ShellContent x:Name="UserProfileShell"
                   Route="userprofile"
-                  ContentTemplate="{DataTemplate local:UserProfilePage}" />
+                  ContentTemplate="{DataTemplate views:UserProfilePage}" />
 
     <ShellContent x:Name="EditProfileShell"
                   Route="editprofile"
-                  ContentTemplate="{DataTemplate local:EditProfilePage}" />
+                  ContentTemplate="{DataTemplate views:EditProfilePage}" />
+
+    <ShellContent
+        Title="Astroloji"
+        ContentTemplate="{DataTemplate views:AstrologyPage}"
+        Route="astrology"
+        Icon="🌟" />
 
 </Shell>

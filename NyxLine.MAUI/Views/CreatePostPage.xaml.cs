@@ -44,27 +44,6 @@ public partial class CreatePostPage : ContentPage, INotifyPropertyChanged
         _apiService = apiService;
         _authService = authService;
         BindingContext = this;
-        LoadUserInfo();
-    }
-
-    private async void LoadUserInfo()
-    {
-        try
-        {
-            var currentUser = await _authService.GetCurrentUserAsync();
-            if (currentUser != null)
-            {
-                UserNameLabel.Text = $"{currentUser.FirstName} {currentUser.LastName}";
-                if (!string.IsNullOrEmpty(currentUser.ProfileImagePath))
-                {
-                    UserProfileImage.Source = $"http://localhost:8080{currentUser.ProfileImagePath}";
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Kullanıcı bilgileri yüklenirken hata: {ex.Message}");
-        }
     }
 
     private void OnContentChanged(object sender, TextChangedEventArgs e)

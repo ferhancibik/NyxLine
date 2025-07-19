@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using System.ComponentModel;
 
 namespace NyxLine.MAUI.Models
 {
@@ -8,7 +9,7 @@ namespace NyxLine.MAUI.Models
         News = 1
     }
 
-    public class Post
+    public class Post : INotifyPropertyChanged
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
@@ -31,11 +32,35 @@ namespace NyxLine.MAUI.Models
         [JsonPropertyName("userProfileImage")]
         public string? UserProfileImage { get; set; }
 
+        private int _likeCount;
         [JsonPropertyName("likeCount")]
-        public int LikeCount { get; set; }
+        public int LikeCount 
+        { 
+            get => _likeCount;
+            set
+            {
+                if (_likeCount != value)
+                {
+                    _likeCount = value;
+                    OnPropertyChanged(nameof(LikeCount));
+                }
+            }
+        }
 
+        private bool _isLikedByCurrentUser;
         [JsonPropertyName("isLikedByCurrentUser")]
-        public bool IsLikedByCurrentUser { get; set; }
+        public bool IsLikedByCurrentUser 
+        { 
+            get => _isLikedByCurrentUser;
+            set
+            {
+                if (_isLikedByCurrentUser != value)
+                {
+                    _isLikedByCurrentUser = value;
+                    OnPropertyChanged(nameof(IsLikedByCurrentUser));
+                }
+            }
+        }
 
         [JsonPropertyName("createdAt")]
         public DateTime CreatedAt { get; set; }
@@ -48,6 +73,34 @@ namespace NyxLine.MAUI.Models
 
         [JsonPropertyName("isUserAdmin")]
         public bool IsUserAdmin { get; set; }
+
+        // Repost özellikleri
+        private bool _isRepostedByCurrentUser;
+        [JsonPropertyName("isRepostedByCurrentUser")]
+        public bool IsRepostedByCurrentUser
+        {
+            get => _isRepostedByCurrentUser;
+            set
+            {
+                if (_isRepostedByCurrentUser != value)
+                {
+                    _isRepostedByCurrentUser = value;
+                    OnPropertyChanged(nameof(IsRepostedByCurrentUser));
+                }
+            }
+        }
+
+        [JsonPropertyName("isRepost")]
+        public bool IsRepost { get; set; }
+
+        [JsonPropertyName("originalPostId")]
+        public int? OriginalPostId { get; set; }
+
+        [JsonPropertyName("originalPost")]
+        public Post? OriginalPost { get; set; }
+
+        [JsonPropertyName("repostCount")]
+        public int RepostCount { get; set; }
 
         public string PostImageUrl => string.IsNullOrEmpty(ImagePath) 
             ? string.Empty 
@@ -77,6 +130,13 @@ namespace NyxLine.MAUI.Models
                 if (timeSpan.TotalDays < 30) return $"{(int)(timeSpan.TotalDays / 7)}h önce";
                 return CreatedAt.ToString("dd.MM.yyyy");
             }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 } 

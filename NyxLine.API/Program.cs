@@ -392,6 +392,33 @@ app.MapDelete("/api/posts/{postId:int}/like", async (int postId, IPostService po
     return Results.BadRequest(new { message = result.Message });
 }).RequireAuthorization().WithTags("Posts");
 
+// Repost endpoints
+app.MapPost("/api/posts/{postId:int}/repost", async (int postId, string? content, IPostService postService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    var result = await postService.RepostAsync(postId, userId, content);
+    if (result.Success)
+    {
+        return Results.Ok(new { message = result.Message, post = result.Post });
+    }
+    return Results.BadRequest(new { message = result.Message });
+}).RequireAuthorization().WithTags("Posts");
+
+app.MapDelete("/api/posts/{postId:int}/repost", async (int postId, IPostService postService, ClaimsPrincipal user) =>
+{
+    var userId = GetCurrentUserId(user);
+    if (userId == null) return Results.Unauthorized();
+    
+    var result = await postService.UndoRepostAsync(postId, userId);
+    if (result.Success)
+    {
+        return Results.Ok(new { message = result.Message });
+    }
+    return Results.BadRequest(new { message = result.Message });
+}).RequireAuthorization().WithTags("Posts");
+
 // NEWS ENDPOINTS
 app.MapGet("/api/news", async (int page, int pageSize, IAdminService adminService) =>
 {

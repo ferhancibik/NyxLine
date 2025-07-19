@@ -27,6 +27,12 @@ namespace NyxLine.API.Models
         
         [MaxLength(200)]
         public string? NewsTitle { get; set; }
+
+        // Repost özellikleri
+        public int? OriginalPostId { get; set; }
+        public virtual Post? OriginalPost { get; set; }
+        public virtual ICollection<Post> Reposts { get; set; } = new List<Post>();
+        public bool IsRepost => OriginalPostId.HasValue;
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         
